@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import crypto from 'crypto';
 import sanitizeHtml from 'sanitize-html';
-import {minify} from 'html-minifier';
+import { minify } from 'html-minifier';
 import mongoose from 'mongoose';
 import {
     ErrorException,
@@ -17,9 +17,9 @@ function sanitize(content) {
     content = sanitizeHtml(content, {
         allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'span', 'h2', 'article']),
         allowedAttributes: {
-            a: ['href', 'name', 'target'],
-            img: ['src', 'alt', 'title'],
-            iframe: ['src'],
+            a: ['href', 'name', 'target', 'style'],
+            img: ['src', 'alt', 'title', 'style'],
+            iframe: ['src', 'style'],
             '*': ['style'],
         },
         allowedStyles: {
@@ -53,7 +53,7 @@ const createCacheName = (prefix, options) => {
 function registerConnection(name, config) {
     let url = `mongodb://${config.username}:${config.password}@`;
     config.shard.map((item, key) => {
-        if(key > 0){
+        if (key > 0) {
             url += ',';
         }
         url += `${item.host}:${item.port}`;
