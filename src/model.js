@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import sanitizeHtml from 'sanitize-html';
 import { minify } from 'html-minifier';
 import mongoose from 'mongoose';
+import MongooseDouble from 'mongoose-double';
 import {
     ErrorException,
     EMAIL_FORMAT,
@@ -12,6 +13,8 @@ import {
     PHONE_NUMBER_FORMAT,
     SLUG_FORMAT
 } from '@azteam/error';
+
+MongooseDouble(mongoose);
 
 function sanitize(content) {
     content = sanitizeHtml(content, {
@@ -67,7 +70,11 @@ function registerConnection(name, config) {
 }
 
 
-const DataTypes = {};
+const DataTypes = {
+    DOUBLE: mongoose.Schema.Types.Double,
+    STRING: String,
+    INTEGER: Number,
+};
 
 class Model {
 

@@ -1,6 +1,6 @@
 {
     "name": "@azteam/mongo-model",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "",
     "main": "lib/index.js",
     "repository": {
@@ -30,6 +30,7 @@
         "html-minifier": "^4.0.0",
         "lodash": "~4.17.10",
         "mongoose": "^5.8.11",
+        "mongoose-double": "^0.0.1",
         "sanitize-html": "^1.20.1"
     },
     "devDependencies": {
