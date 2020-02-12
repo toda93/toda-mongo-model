@@ -100,6 +100,8 @@ class Model {
             this.cacheService = cacheService;
             this.useCache = true;
         }
+
+        
     }
 
 }
