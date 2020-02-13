@@ -1,8 +1,8 @@
 {
     "name": "@azteam/mongo-model",
-    "version": "1.0.6",
+    "version": "1.0.8",
     "description": "",
-    "main": "lib/index.js",
+    "main": "src/index.js",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/toda93/toda-mongo-model.git"
@@ -25,37 +25,12 @@
     },
     "homepage": "https://github.com/toda93/toda-mongo-model#readme",
     "dependencies": {
-        "@azteam/crypto": "1.0.6",
-        "@azteam/error": "1.0.1",
+        "@azteam/crypto": "1.0.7",
+        "@azteam/error": "1.0.2",
         "html-minifier": "^4.0.0",
         "lodash": "~4.17.10",
         "mongoose": "^5.8.11",
         "mongoose-double": "^0.0.1",
         "sanitize-html": "^1.20.1"
-    },
-    "devDependencies": {
-        "@babel/cli": "^7.7.5",
-        "@babel/core": "^7.7.5",
-        "@babel/plugin-transform-async-to-generator": "^7.7.4",
-        "@babel/plugin-transform-runtime": "^7.7.6",
-        "@babel/preset-env": "^7.7.6",
-        "@babel/runtime": "^7.7.5"
-    },
-    "babel": {
-        "presets": [
-            [
-                "@babel/preset-env",
-                {
-                    "targets": {
-                        "node": "current"
-                    }
-                }
-            ]
-        ]
-    },
-    "scripts": {
-        "pretest": "babel src --out-dir lib",
-        "test": "node lib/test.js",
-        "prepublish": "babel src --out-dir lib"
     }
 }
