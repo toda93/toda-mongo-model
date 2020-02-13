@@ -1,6 +1,6 @@
 import Model, { DataTypes } from './model';
 import DataRepository from './DataRepository';
-import Provider from './MongoProvider';
+import Provider from './Provider';
 
 
 export {
