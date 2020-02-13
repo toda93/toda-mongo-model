@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import crypto from 'crypto';
 import sanitizeHtml from 'sanitize-html';
-import { minify } from 'html-minifier';
-import mongoose from 'mongoose';
+import {minify} from 'html-minifier';
+import mongoose, {Schema} from 'mongoose';
 import MongooseDouble from 'mongoose-double';
 import {
     ErrorException,
@@ -53,32 +53,38 @@ const createCacheName = (prefix, options) => {
 };
 
 
+
 function registerConnection(name, config) {
-    let url = `mongodb://${config.username}:${config.password}@`;
+    let url = `mongodb://`;
     config.shard.map((item, key) => {
         if (key > 0) {
             url += ',';
         }
         url += `${item.host}:${item.port}`;
     });
-    url = `${url}/${config.database}`;
     return mongoose.createConnection(url, {
+        dbName: config.database,
+        user: config.username,
+        pass: config.password,
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        useCreateIndex: true
+        useCreateIndex: true,
     });
 }
 
+function convertToSchema(colAttributes) {
+    return new Schema(colAttributes);
+}
 
 const DataTypes = {
     DOUBLE: mongoose.Schema.Types.Double,
+    ID: mongoose.Schema.ObjectId,
+    INTEGER: mongoose.Decimal128,
     STRING: String,
-    INTEGER: Number,
+    NUMBER: Number,
 };
 
 class Model {
-
-
     static createCacheName(prefix, options) {
         if (_.isEmpty(options)) {
             return prefix;
@@ -91,7 +97,6 @@ class Model {
         this.cacheService.remove(`${database}_${name}_`);
     }
 
-
     static register(connection, cacheService = null) {
 
         this.connection = connection;
@@ -100,10 +105,9 @@ class Model {
             this.cacheService = cacheService;
             this.useCache = true;
         }
-
-        
+        const schema = convertToSchema(this.col_attributes);
+        return this.connection.model(this.name, schema);
     }
-
 }
 
 export default Model;
