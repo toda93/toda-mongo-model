@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import crypto from 'crypto';
 import sanitizeHtml from 'sanitize-html';
 import { minify } from 'html-minifier';
 import mongoose, { Schema } from 'mongoose';
@@ -13,9 +12,6 @@ import {
     PHONE_NUMBER_FORMAT,
     SLUG_FORMAT
 } from '@azteam/error';
-
-
-import QueryBuilder from './QueryBuilder';
 
 MongooseDouble(mongoose);
 
@@ -96,12 +92,6 @@ class Model {
 
         return this.connection.model(this.name, schema);
     }
-
-
-    static query(){
-        return new QueryBuilder(this);
-    }
-
 }
 
 export default Model;

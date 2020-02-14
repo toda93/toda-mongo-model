@@ -1,4 +1,4 @@
-import {ErrorException, NOT_INIT_METHOD} from '@azteam/error';
+import { ErrorException, NOT_INIT_METHOD } from '@azteam/error';
 
 class DataRepository {
 
@@ -21,19 +21,19 @@ class DataRepository {
         }
     }
 
+
+    async get(options = {}) {
+        const Model = this.getModel();
+        return Model.find(options);
+    }
+
+    async first(options = {}) {
+        const Model = this.getModel();
+        return Model.findOne(options);
+    }
+
     
-
-    async getAll(options = {}) {
-        return await this.getModel().find(options);
-    }
-
-    async getOne(options = {}) {
-        return this.getModel().findOne(options);
-    }
-
-    async getById(id){
-        return this.getModel().findById(id);
-    }
+    
 
     async create(data, guard = []) {
         const Model = this.getModel();
@@ -41,7 +41,6 @@ class DataRepository {
         return this._save(item, data, guard);
     }
 
-    
     async beforeLoadData(data) {
         return data;
     }
