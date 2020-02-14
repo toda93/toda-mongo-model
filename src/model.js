@@ -55,22 +55,16 @@ const createCacheName = (prefix, options) => {
 
 function convertToSchema(colAttributes) {
     const schema = new Schema(colAttributes);
-    schema.methods.loadData = (data, guard = []) => {
+    schema.methods.loadData = function (data, guard = []) {
         for (const key in data) {
-            if (!guard.includes(key) && !_.isUndefined(data[key]) && _.isUndefined(this.attributes[key])) {
-                let value = data[key];
-                if (typeof value === 'object' || Array.isArray(value)) {
-                    value = JSON.stringify(value);
-                }
-                this.setDataValue(key, value);
+            if (!guard.includes(key)) {
+                this[key] = data[key];
             }
         }
         return this;
     }
     return schema;
 }
-
-
 
 class Model {
     static createCacheName(prefix, options) {
@@ -97,18 +91,6 @@ class Model {
         return this.connection.model(this.name, schema);
     }
 
-    loadData(data, guard = []) {
-        for (const key in data) {
-            if (!guard.includes(key) && !_.isUndefined(data[key]) && _.isUndefined(this.attributes[key])) {
-                let value = data[key];
-                if (typeof value === 'object' || Array.isArray(value)) {
-                    value = JSON.stringify(value);
-                }
-                this.setDataValue(key, value);
-            }
-        }
-        return this;
-    }
 }
 
 export default Model;

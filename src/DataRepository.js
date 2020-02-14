@@ -27,11 +27,11 @@ class DataRepository {
     }
 
     async getOne(options = {}) {
-        return this.getModel().findOne(options).exec();
+        return this.getModel().findOne(options);
     }
 
     async getById(id){
-        return this.getModel().findById(id).exec();
+        return this.getModel().findById(id);
     }
 
     async create(data, guard = []) {
@@ -109,6 +109,7 @@ class DataRepository {
             ...guard
         ]);
         
+        item.increment();
         return await item.save();
     }
 
