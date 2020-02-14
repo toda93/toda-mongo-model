@@ -27,13 +27,16 @@ class DataRepository {
     }
 
     async getOne(options = {}) {
-        return this.getModel().findOne(options);
+        return this.getModel().findOne(options).exec();
     }
 
+    async getById(id){
+        return this.getModel().findById(id).exec();
+    }
 
     async create(data, guard = []) {
         const Model = this.getModel();
-        const item = new Model;
+        const item = new Model();
         return this._save(item, data, guard);
     }
     async createWithMetadata(data, guard = []) {
@@ -53,7 +56,7 @@ class DataRepository {
     }
 
     async update(id, data, guard = []) {
-        const item = await this.getOneBy('id', id);
+        const item = await this.getById('id');
         return this._save(item, data, guard);
     }
 

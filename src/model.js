@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import crypto from 'crypto';
 import sanitizeHtml from 'sanitize-html';
-import {minify} from 'html-minifier';
-import mongoose, {Schema} from 'mongoose';
+import { minify } from 'html-minifier';
+import mongoose, { Schema } from 'mongoose';
 import MongooseDouble from 'mongoose-double';
 import {
     ErrorException,
@@ -54,8 +54,22 @@ const createCacheName = (prefix, options) => {
 
 
 function convertToSchema(colAttributes) {
-    return new Schema(colAttributes);
+    const schema = new Schema(colAttributes);
+    schema.methods.loadData = (data, guard = []) => {
+        for (const key in data) {
+            if (!guard.includes(key) && !_.isUndefined(data[key]) && _.isUndefined(this.attributes[key])) {
+                let value = data[key];
+                if (typeof value === 'object' || Array.isArray(value)) {
+                    value = JSON.stringify(value);
+                }
+                this.setDataValue(key, value);
+            }
+        }
+        return this;
+    }
+    return schema;
 }
+
 
 
 class Model {
@@ -82,6 +96,19 @@ class Model {
         const schema = convertToSchema(this.col_attributes);
         return this.connection.model(this.name, schema);
     }
+
+    loadData(data, guard = []) {
+        for (const key in data) {
+            if (!guard.includes(key) && !_.isUndefined(data[key]) && _.isUndefined(this.attributes[key])) {
+                let value = data[key];
+                if (typeof value === 'object' || Array.isArray(value)) {
+                    value = JSON.stringify(value);
+                }
+                this.setDataValue(key, value);
+            }
+        }
+        return this;
+    }
 }
 
 export default Model;
@@ -93,4 +120,3 @@ export const DataTypes = {
     STRING: String,
     NUMBER: Number,
 };
-
