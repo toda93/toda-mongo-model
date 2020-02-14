@@ -35,6 +35,13 @@ class DataRepository {
     }
 
     async create(data, guard = []) {
+
+        guard = [
+            ...guard,
+            '_id',
+            '__v'
+        ]
+        
         const Model = this.getModel();
         const item = new Model();
         return this._save(item, data, guard);
