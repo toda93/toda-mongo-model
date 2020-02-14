@@ -55,6 +55,12 @@ const createCacheName = (prefix, options) => {
 
 function convertToSchema(colAttributes) {
     const schema = new Schema(colAttributes);
+
+    schema.pre('save', function(next) {
+        this.increment();
+        next();
+    });
+
     schema.methods.loadData = function (data, guard = []) {
         for (const key in data) {
             if (!guard.includes(key)) {
