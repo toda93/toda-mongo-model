@@ -1,4 +1,4 @@
-import {ErrorException, NOT_INIT_METHOD} from '@azteam/crypto';
+import {ErrorException, NOT_INIT_METHOD} from '@azteam/error';
 
 class DataRepository {
 
