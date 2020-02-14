@@ -1,4 +1,5 @@
 import {ErrorException, NOT_INIT_METHOD} from '@azteam/error';
+import mongoose from 'mongoose';
 
 function registerConnection(name, config) {
     let url = `mongodb://`;
