@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import crypto from 'crypto';
 import sanitizeHtml from 'sanitize-html';
-import { minify } from 'html-minifier';
-import mongoose, { Schema } from 'mongoose';
+import {minify} from 'html-minifier';
+import mongoose, {Schema} from 'mongoose';
 import MongooseDouble from 'mongoose-double';
 import {
     ErrorException,
@@ -56,8 +56,15 @@ const createCacheName = (prefix, options) => {
 function convertToSchema(colAttributes) {
     const schema = new Schema(colAttributes);
 
-    schema.pre('save', function(next) {
-        this.increment();
+    schema.pre('save', function (next) {
+        const now = Math.floor(Date.now() / 1000);
+        if (this.isNew) {
+            this.created_at = now;
+        }
+        if (this.isModified()) {
+            this.increment();
+            this.updated_at = now;
+        }
         next();
     });
 

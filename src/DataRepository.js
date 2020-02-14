@@ -109,7 +109,6 @@ class DataRepository {
             ...guard
         ]);
         
-        item.increment();
         return await item.save();
     }
 
