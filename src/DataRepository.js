@@ -13,7 +13,7 @@ class DataRepository {
     }
 
 
-    _getModel() {
+    getModel() {
         if (this._model) {
             return this._model;
         } else {
@@ -22,25 +22,32 @@ class DataRepository {
     }
 
     async getAll(options = {}) {
-        return await this._getModel().find(options);
+        return await this.getModel().find(options);
     }
 
     async getOne(options = {}) {
-        return this._getModel().findOne(options);
+        return this.getModel().findOne(options);
     }
 
     async getById(id){
-        return this._getModel().findById(id);
+        return this.getModel().findById(id);
     }
 
     async create(data, guard = []) {
-        const Model = this._getModel();
-        return new Model();
+        const Model = this.getModel();
+        const item = new Model();
+        return this._save(item, data, guard);
     }
 
-
+    
     async beforeLoadData(data) {
         return data;
+    }
+
+    async _save(item, data, guard = []) {
+        data = await this.beforeLoadData(data);
+        item.loadData(data, guard);
+        return await item.save();
     }
 
 }
