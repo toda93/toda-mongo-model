@@ -53,36 +53,10 @@ const createCacheName = (prefix, options) => {
 };
 
 
-
-function registerConnection(name, config) {
-    let url = `mongodb://`;
-    config.shard.map((item, key) => {
-        if (key > 0) {
-            url += ',';
-        }
-        url += `${item.host}:${item.port}`;
-    });
-    return mongoose.createConnection(url, {
-        dbName: config.database,
-        user: config.username,
-        pass: config.password,
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useCreateIndex: true,
-    });
-}
-
 function convertToSchema(colAttributes) {
     return new Schema(colAttributes);
 }
 
-const DataTypes = {
-    DOUBLE: mongoose.Schema.Types.Double,
-    ID: mongoose.Schema.ObjectId,
-    INTEGER: mongoose.Decimal128,
-    STRING: String,
-    NUMBER: Number,
-};
 
 class Model {
     static createCacheName(prefix, options) {
@@ -112,8 +86,11 @@ class Model {
 
 export default Model;
 
+export const DataTypes = {
+    DOUBLE: mongoose.Schema.Types.Double,
+    ID: mongoose.Schema.ObjectId,
+    INTEGER: mongoose.Decimal128,
+    STRING: String,
+    NUMBER: Number,
+};
 
-export {
-    DataTypes,
-    registerConnection
-}

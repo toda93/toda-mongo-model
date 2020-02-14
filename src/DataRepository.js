@@ -1,32 +1,50 @@
+import {ErrorException, NOT_INIT_METHOD} from '@azteam/crypto';
+
 class DataRepository {
-    constructor(model, fks = []) {
-        this.model = model;
-        this.fks = fks;
+
+    constructor() {
+        this._model = null;
+        this._fks = [];
     }
 
+    init(model, fks = []) {
+        this._model = model;
+        this._fks = fks;
+    }
+
+
+    getModel() {
+        if (this._model) {
+            return this._model;
+        } else {
+            throw new ErrorException(NOT_INIT_METHOD);
+        }
+    }
+
+
     async getAll(options = {}) {
-        return await this.model.get(options);
+        return await this.getModel().get(options);
     }
     async getOne(options = {}) {
-        return this.model.first(options);
+        return this.getModel().first(options);
     }
 
     async getOneBy(key, value) {
-        return this.model.firstByAttr(key, value);
+        return this.getModel().firstByAttr(key, value);
     }
     async getOneBySlugOrKey(value) {
         return this.getOne({
             where: {
                 $or: [
-                    {slug: value},
-                    {key: value}
+                    { slug: value },
+                    { key: value }
                 ]
             }
         });
     }
 
     async create(data, guard = []) {
-        const item = new this.model();
+        const item = new this.getModel()();
         return this._save(item, data, guard);
     }
     async createWithMetadata(data, guard = []) {
@@ -50,11 +68,11 @@ class DataRepository {
         return this._save(item, data, guard);
     }
     async updateAll(data, options) {
-        return this.model.update(data, options);
+        return this.getModel().update(data, options);
     }
 
     async addUnique(attr, data) {
-        let item = await this.model.firstByAttr(attr, data[attr]);
+        let item = await this.getModel().firstByAttr(attr, data[attr]);
         if (item) {
             return this.update(item.id, data);
         } else {
@@ -86,11 +104,11 @@ class DataRepository {
     }
 
     async getTotalItem(options = {}) {
-        return this.model.count(options);
+        return this.getModel().count(options);
     }
 
     async runTransaction(callback) {
-        return this.model.runTransaction(callback);
+        return this.getModel().runTransaction(callback);
     }
     async beforeLoadData(data) {
         return data;
@@ -104,7 +122,7 @@ class DataRepository {
             ...guard
         ]);
         if (data._transaction) {
-            return await item.save({transaction: data._transaction});
+            return await item.save({ transaction: data._transaction });
         }
         return await item.save();
     }
