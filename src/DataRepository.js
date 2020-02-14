@@ -13,7 +13,7 @@ class DataRepository {
     }
 
 
-    getModel() {
+    _getModel() {
         if (this._model) {
             return this._model;
         } else {
@@ -22,19 +22,19 @@ class DataRepository {
     }
 
     async getAll(options = {}) {
-        return await this.getModel().find(options);
+        return await this._getModel().find(options);
     }
 
     async getOne(options = {}) {
-        return this.getModel().findOne(options);
+        return this._getModel().findOne(options);
     }
 
     async getById(id){
-        return this.getModel().findById(id);
+        return this._getModel().findById(id);
     }
 
     async create(data, guard = []) {
-        const Model = this.getModel();
+        const Model = this._getModel();
         return new Model();
     }
 
