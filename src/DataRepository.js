@@ -32,7 +32,8 @@ class DataRepository {
 
 
     async create(data, guard = []) {
-        const item = new this.getModel();
+        const Model = this.getModel();
+        const item = new Model;
         return this._save(item, data, guard);
     }
     async createWithMetadata(data, guard = []) {
