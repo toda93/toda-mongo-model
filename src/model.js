@@ -14,6 +14,9 @@ import {
     SLUG_FORMAT
 } from '@azteam/error';
 
+
+import QueryBuilder from './QueryBuilder';
+
 MongooseDouble(mongoose);
 
 function sanitize(content) {
@@ -44,13 +47,6 @@ function sanitize(content) {
         collapseWhitespace: true
     });
 }
-
-const createCacheName = (prefix, options) => {
-    if (_.isEmpty(options)) {
-        return prefix;
-    }
-    return prefix + crypto.createHash('sha1').update(JSON.stringify(options)).digest('hex');
-};
 
 
 function convertToSchema(colAttributes) {
@@ -92,28 +88,18 @@ function convertToSchema(colAttributes) {
 }
 
 class Model {
-    static createCacheName(prefix, options) {
-        if (_.isEmpty(options)) {
-            return prefix;
-        }
-        return prefix + crypto.createHash('sha1').update(JSON.stringify(options)).digest('hex');
-    }
-
-    static removeCache(database, name) {
-        // this.cacheService.remove(`${database}_${name}_all_`);
-        this.cacheService.remove(`${database}_${name}_`);
-    }
-
-    static register(connection, cacheService = null) {
+    static register(connection) {
 
         this.connection = connection;
 
-        if (cacheService) {
-            this.cacheService = cacheService;
-            this.useCache = true;
-        }
         const schema = convertToSchema(this.col_attributes);
+
         return this.connection.model(this.name, schema);
+    }
+
+
+    static query(){
+        return new QueryBuilder(this);
     }
 
 }

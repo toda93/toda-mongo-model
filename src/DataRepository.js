@@ -21,6 +21,8 @@ class DataRepository {
         }
     }
 
+    
+
     async getAll(options = {}) {
         return await this.getModel().find(options);
     }

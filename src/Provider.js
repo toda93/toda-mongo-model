@@ -35,14 +35,6 @@ class Provider {
         return this.model[model.name];
     }
 
-
-    async getModel(name) {
-        if (!this.model[name]) {
-            return this.model[name];
-        }
-        throw new ErrorException(NOT_INIT_METHOD);
-    }
-
     async _getConnection(name) {
         if (!this.connections[name]) {
             this.connections[name] = await registerConnection(name, this.configs[name]);
