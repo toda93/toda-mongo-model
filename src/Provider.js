@@ -16,7 +16,7 @@ function registerConnection(name, config) {
         pass: config.password,
         useNewUrlParser: true,
         useCreateIndex: true,
-        useUnifiedTopology: true;
+        useUnifiedTopology: true
     };
 
     if (config.shard.length === 1) {
