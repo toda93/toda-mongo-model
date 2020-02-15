@@ -70,7 +70,8 @@ function convertToSchema(colAttributes) {
             'created_id',
             'updated_at',
             'updated_id',
-            'status'
+            'status',
+            'message'
         ];
 
         for (const key in data) {
