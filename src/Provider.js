@@ -10,9 +10,6 @@ function registerConnection(name, config) {
         url += `${item.host}:${item.port}`;
     });
     return mongoose.createConnection(url, {
-        socketOptions: {
-            autoReconnect: true
-        },
         dbName: config.database,
         user: config.username,
         pass: config.password,
