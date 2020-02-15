@@ -1,4 +1,4 @@
-import {ErrorException, NOT_INIT_METHOD} from '@azteam/error';
+import { ErrorException, NOT_INIT_METHOD } from '@azteam/error';
 import mongoose from 'mongoose';
 
 function registerConnection(name, config) {
@@ -9,14 +9,23 @@ function registerConnection(name, config) {
         }
         url += `${item.host}:${item.port}`;
     });
-    return mongoose.createConnection(url, {
+
+    const options = {
         dbName: config.database,
         user: config.username,
         pass: config.password,
         useNewUrlParser: true,
-        useUnifiedTopology: config.shard.length > 1,
         useCreateIndex: true,
-    });
+        options.useUnifiedTopology: true;
+    };
+
+    if (config.shard.length === 1) {
+        options.socketOptions = {
+            autoReconnect: true
+        };
+        options.useUnifiedTopology = false;
+    }
+    return mongoose.createConnection(url, options);
 }
 
 class Provider {
