@@ -1,7 +1,7 @@
-import { ErrorException, NOT_INIT_METHOD } from '@azteam/error';
+import {ErrorException, NOT_INIT_METHOD} from '@azteam/error';
 import mongoose from 'mongoose';
 
-function registerConnection(name, config) {
+async function registerConnection(name, config) {
     let url = `mongodb://`;
     config.shard.map((item, key) => {
         if (key > 0) {
@@ -16,16 +16,14 @@ function registerConnection(name, config) {
         pass: config.password,
         useNewUrlParser: true,
         useCreateIndex: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
+        serverSelectionTimeoutMS: 5000
     };
-
-    if (config.shard.length === 1) {
-        options.socketOptions = {
-            autoReconnect: true
-        };
-        options.useUnifiedTopology = false;
+    try {
+        return mongoose.connect(url, options);
+    } catch (e) {
+        conssole.log('error', e);
     }
-    return mongoose.createConnection(url, options);
 }
 
 class Provider {
