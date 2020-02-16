@@ -44,7 +44,7 @@ class DataRepository {
 
     async updateByUser(user_id = null, model_id, data = {}, guard = []) {
 
-        const item = this.firstById(model_id);
+        const item = await this.firstById(model_id);
         if (item) {
             if (user_id) {
                 item.updated_id = user_id;
@@ -61,7 +61,7 @@ class DataRepository {
     async beforeLoadData(data) {
         return data;
     }
-    
+
     async _save(item, data, guard = []) {
         data = await this.beforeLoadData(data);
         item.loadData(data, guard);
