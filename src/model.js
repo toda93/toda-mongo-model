@@ -50,12 +50,13 @@ function convertToSchema(colAttributes) {
 
     schema.pre('save', function(next) {
         const now = Math.floor(Date.now() / 1000);
+        this.updated_at = now;
         if (this.isNew) {
             this.created_at = now;
         }
         if (this.isModified()) {
             this.increment();
-            this.updated_at = now;
+            this.modified_at = now;
         }
         next();
     });
@@ -66,10 +67,11 @@ function convertToSchema(colAttributes) {
             ...guard,
             '_id',
             '__v',
+            'updated_at',
             'created_at',
             'created_id',
-            'updated_at',
-            'updated_id',
+            'modified_at',
+            'modified_id',
             'status',
             'message'
         ];
