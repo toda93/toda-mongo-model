@@ -51,8 +51,8 @@ class DataRepository {
         }
         throw new ErrorException(NOT_EXISTS);
     }
-    async update(data, guard = []) {
-        return this.updateByUser(null, data, guard);
+    async update(model_id, data, guard = []) {
+        return this.updateByUser(null, model_id, data, guard);
     }
     async beforeLoadData(data) {
         return data;
