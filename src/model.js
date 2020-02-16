@@ -44,10 +44,9 @@ function sanitize(content) {
     });
 }
 
-
 function convertToSchema(colAttributes) {
     const schema = new Schema(colAttributes);
-
+    
     schema.pre('save', function(next) {
         const now = Math.floor(Date.now() / 1000);
         this.updated_at = now;
