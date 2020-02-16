@@ -46,7 +46,7 @@ function sanitize(content) {
 
 function convertToSchema(colAttributes) {
     const schema = new Schema(colAttributes);
-    
+
     schema.pre('save', function(next) {
         const now = Math.floor(Date.now() / 1000);
         this.updated_at = now;
@@ -62,18 +62,22 @@ function convertToSchema(colAttributes) {
 
     schema.methods.loadData = function(data, guard = []) {
 
-        guard = [
-            ...guard,
-            '_id',
-            '__v',
-            'updated_at',
-            'created_at',
-            'created_id',
-            'modified_at',
-            'modified_id',
-            'status',
-            'message'
-        ];
+        if (Array.isArray(guard)) {
+            guard = [
+                ...guard,
+                '_id',
+                '__v',
+                'updated_at',
+                'created_at',
+                'created_id',
+                'modified_at',
+                'modified_id',
+                'status',
+                'message'
+            ];
+        } else {
+            guard = [];
+        }
 
         for (const key in data) {
             if (!guard.includes(key)) {

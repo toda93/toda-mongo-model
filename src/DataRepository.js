@@ -37,9 +37,11 @@ class DataRepository {
         }
         return this._save(item, data, guard);
     }
+
     async create(data, guard = []) {
         return this.createByUser(null, data, guard);
     }
+
     async updateByUser(user_id = null, model_id, data = {}, guard = []) {
 
         const item = this.firstById(model_id);
@@ -51,12 +53,15 @@ class DataRepository {
         }
         throw new ErrorException(NOT_EXISTS);
     }
+
     async update(model_id, data, guard = []) {
         return this.updateByUser(null, model_id, data, guard);
     }
+
     async beforeLoadData(data) {
         return data;
     }
+    
     async _save(item, data, guard = []) {
         data = await this.beforeLoadData(data);
         item.loadData(data, guard);
