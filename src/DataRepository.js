@@ -28,6 +28,10 @@ class DataRepository {
         const Model = this.getModel();
         return Model.findById(id);
     }
+
+
+
+
     async createByUser(user_id = null, data = {}, guard = []) {
         const Model = this.getModel();
         const item = new Model();
@@ -40,6 +44,35 @@ class DataRepository {
 
     async create(data, guard = []) {
         return this.createByUser(null, data, guard);
+    }
+
+    async createWithMetaByUser(user_id = null, data = {}, guard = []) {
+        const Model = this.getModel();
+        const item = new Model();
+        if (user_id) {
+            item.created_id = user_id;
+            item.updated_id = user_id;
+        }
+
+
+        if (data.images && _.isString(data.images)) {
+            data.images = JSON.parse(data.images);
+            data.thumb = data.images.thumb;
+        }
+
+        if (data.thumb && _.isString(data.thumb)) {
+            data.thumb = JSON.parse(data.thumb);
+        }
+        data.metadata_title = data.metadata_title ? data.metadata_title : data.title;
+        data.metadata_keywords = data.metadata_keywords ? data.metadata_keywords : data.title;
+        data.metadata_description = data.metadata_description ? data.metadata_description : (data.text_intro ? data.text_intro : data.title);
+        data.metadata_image_url = data.metadata_image_url ? data.metadata_image_url : (data.thumb && data.thumb.original ? data.thumb.original : '');
+
+        return this._save(item, data, guard);
+    }
+    
+    async createWithMeta(data = {}, guard = []) {
+        return this.createWithMetaByUser(null, data, guard);
     }
 
     async updateByUser(user_id = null, model_id, data = {}, guard = []) {
