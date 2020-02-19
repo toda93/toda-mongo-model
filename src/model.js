@@ -2,7 +2,8 @@ import _ from 'lodash';
 import sanitizeHtml from 'sanitize-html';
 import { minify } from 'html-minifier';
 import mongoose, { Schema } from 'mongoose';
-import MongooseDouble from 'mongoose-double';
+import Double from '@mongoosejs/double';
+
 import {
     ErrorException,
     EMAIL_FORMAT,
@@ -13,7 +14,6 @@ import {
     SLUG_FORMAT
 } from '@azteam/error';
 
-MongooseDouble(mongoose);
 
 function sanitize(content) {
     content = sanitizeHtml(content, {
@@ -103,7 +103,7 @@ class Model {
 export default Model;
 
 export const DataTypes = {
-    DOUBLE: mongoose.Schema.Types.Double,
+    DOUBLE: Double,
     ID: mongoose.Schema.ObjectId,
     INTEGER: mongoose.Decimal128,
     STRING: String,
