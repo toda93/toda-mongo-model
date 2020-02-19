@@ -1,4 +1,5 @@
 import { ErrorException, NOT_INIT_METHOD, NOT_EXISTS } from '@azteam/error';
+import { toSlug } from '@azteam/ultilities';
 
 class DataRepository {
     constructor() {
@@ -82,9 +83,12 @@ class DataRepository {
         return this.modify(model_id, data, guard, user_id);
     }
 
-    
-
     async beforeLoadData(data) {
+
+        if(data.title && !data.slug){
+            data.slug = toSlug(data.title);
+        }
+
         return data;
     }
 
