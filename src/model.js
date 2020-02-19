@@ -1,8 +1,8 @@
 import _ from 'lodash';
-import sanitizeHtml from 'sanitize-html';
-import { minify } from 'html-minifier';
+
 import mongoose, { Schema } from 'mongoose';
 import Double from '@mongoosejs/double';
+import {sanitize} from '@azteam/ultilities';
 
 import {
     ErrorException,
@@ -15,34 +15,6 @@ import {
 } from '@azteam/error';
 
 
-function sanitize(content) {
-    content = sanitizeHtml(content, {
-        allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'span', 'h2', 'article']),
-        allowedAttributes: {
-            a: ['href', 'name', 'target', 'style'],
-            img: ['src', 'alt', 'title', 'style'],
-            iframe: ['src', 'style'],
-            '*': ['style'],
-        },
-        allowedStyles: {
-            '*': {
-                // Match HEX and RGB
-                'color': [/^\#(0x)?[0-9a-f]+$/i, /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/],
-                'text-align': [/^left$/, /^right$/, /^center$/],
-                // Match any number with px, em, or %
-                'font-size': [/^\d+(?:px|em|%)$/],
-                'line-height': [/^.*$/],
-                'font-style': [/^.*$/],
-                'font-family': [/^.*$/],
-                'font-weight': [/^bold$/],
-            }
-        },
-        allowedIframeHostnames: ['www.youtube.com']
-    });
-    return minify(content.trim(), {
-        collapseWhitespace: true
-    });
-}
 
 function convertToSchema(colAttributes) {
     const schema = new Schema(colAttributes);
