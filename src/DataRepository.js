@@ -95,8 +95,7 @@ class DataRepository {
     async _save(item, data, guard = []) {
         data = await this.beforeLoadData(data);
         item.loadData(data, guard);
-        await item.save();
-        return item;
+        return await item.save();
     }
 }
 export default DataRepository;
