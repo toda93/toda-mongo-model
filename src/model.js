@@ -80,4 +80,5 @@ export const DataTypes = {
     INTEGER: mongoose.Decimal128,
     STRING: String,
     NUMBER: Number,
+    ARRAY: Array
 };
