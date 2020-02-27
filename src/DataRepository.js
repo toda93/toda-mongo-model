@@ -85,7 +85,7 @@ class DataRepository {
 
     async beforeLoadData(data) {
 
-        if(data.title && !data.slug){
+        if (data.title && !data.slug) {
             data.slug = toSlug(data.title);
         }
 
@@ -95,7 +95,8 @@ class DataRepository {
     async _save(item, data, guard = []) {
         data = await this.beforeLoadData(data);
         item.loadData(data, guard);
-        return await item.save();
+        await item.save();
+        return item;
     }
 }
 export default DataRepository;
