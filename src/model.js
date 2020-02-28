@@ -68,7 +68,7 @@ class Model {
 
         const schema = convertToSchema(this.col_attributes);
 
-        return this.connection.model(this.name, schema);
+        return this.connection.model(this.name, schema, this.table_name);
     }
 }
 
