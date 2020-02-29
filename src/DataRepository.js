@@ -92,6 +92,15 @@ class DataRepository {
         return data;
     }
 
+
+    async hardDelete(model_id){
+        const Model = this.getModel();
+        return Model.deleteOne({
+            _id: model_id
+        });
+
+    }
+
     async _save(item, data, guard = []) {
         data = await this.beforeLoadData(data);
         item.loadData(data, guard);
