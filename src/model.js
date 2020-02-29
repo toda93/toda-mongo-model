@@ -78,7 +78,8 @@ export const DataTypes = {
     DOUBLE: Double,
     ID: mongoose.Schema.ObjectId,
     INTEGER: mongoose.Decimal128,
+    OBJECT: mongoose.Mixed,
     STRING: String,
     NUMBER: Number,
-    ARRAY: Array
+    ARRAY: Array,
 };
