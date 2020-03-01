@@ -29,13 +29,6 @@ class DataRepository {
         const Model = this.getModel();
         return Model.findById(id);
     }
-
-    async firstByIdAndRefesh(id) {
-        const item await this.firstById(id);
-        return item.save;
-    }
-
-
     async create(data, guard = [], user_id = null) {
         const Model = this.getModel();
         const item = new Model();
