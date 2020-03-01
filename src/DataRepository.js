@@ -31,10 +31,8 @@ class DataRepository {
     }
 
     async firstByIdAndRefesh(id) {
-        const Model = this.getModel();
-        return Model.findOneAndUpdate(id, {
-            updated_at: Math.floor(Date.now() / 1000
-        });
+        const item await this.firstById(id);
+        return item.save;
     }
 
 
