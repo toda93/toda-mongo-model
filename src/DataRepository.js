@@ -83,6 +83,12 @@ class DataRepository {
         return this.modify(model_id, data, guard, user_id);
     }
 
+    async refresh(model_id) {
+        return modify({
+            updated_at = Math.floor(Date.now() / 1000);
+        });
+    }
+
     async beforeLoadData(data) {
 
         if (data.title && !data.slug) {
@@ -93,7 +99,7 @@ class DataRepository {
     }
 
 
-    async hardDelete(model_id){
+    async hardDelete(model_id) {
         const Model = this.getModel();
         return Model.deleteOne({
             _id: model_id
