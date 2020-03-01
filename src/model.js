@@ -33,8 +33,7 @@ function convertToSchema(colAttributes) {
     });
 
     schema.methods.refresh = function() {
-
-        this.increment();
+        this.updated_at = now;
         this.save();
     }
 
