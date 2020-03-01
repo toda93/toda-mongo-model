@@ -17,6 +17,7 @@ async function registerConnection(name, config) {
         useNewUrlParser: true,
         useCreateIndex: true,
         useUnifiedTopology: true,
+        useFindAndModify: false,
         serverSelectionTimeoutMS: 5000
     };
     try {
