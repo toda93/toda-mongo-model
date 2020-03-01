@@ -84,7 +84,7 @@ class DataRepository {
     }
 
     async refresh(model_id) {
-        return modify({
+        return this.modify(model_id, {
             updated_at = Math.floor(Date.now() / 1000);
         });
     }
