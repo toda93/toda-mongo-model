@@ -21,7 +21,6 @@ function convertToSchema(colAttributes) {
 
     schema.pre('save', function(next) {
         const now = Math.floor(Date.now() / 1000);
-        this.updated_at = now;
         if (this.isNew) {
             this.created_at = now;
         }
@@ -29,13 +28,10 @@ function convertToSchema(colAttributes) {
             this.increment();
             this.modified_at = now;
         }
+        this.updated_at = now;
         next();
     });
 
-    schema.methods.refresh = function() {
-        this.updated_at = Math.floor(Date.now() / 1000);
-        this.save();
-    }
 
     schema.methods.loadData = function(data, guard = []) {
 

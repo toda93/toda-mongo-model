@@ -30,6 +30,13 @@ class DataRepository {
         return Model.findById(id);
     }
 
+    async firstByIdAndRefesh(id) {
+        const Model = this.getModel();
+        return Model.findOneAndUpdate(id, {
+            updated_at: Math.floor(Date.now() / 1000
+        });
+    }
+
 
     async create(data, guard = [], user_id = null) {
         const Model = this.getModel();
@@ -81,12 +88,6 @@ class DataRepository {
 
     async modifyByUser(user_id, model_id, data = {}, guard = []) {
         return this.modify(model_id, data, guard, user_id);
-    }
-
-    async refresh(model_id) {
-        return this.modify(model_id, {
-            updated_at: Math.floor(Date.now() / 1000)
-        });
     }
 
     async beforeLoadData(data) {
