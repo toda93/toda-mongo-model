@@ -32,6 +32,12 @@ function convertToSchema(colAttributes) {
         next();
     });
 
+    schema.methods.refresh = function() {
+
+        this.increment();
+        this.save();
+    }
+
     schema.methods.loadData = function(data, guard = []) {
 
         if (Array.isArray(guard)) {
