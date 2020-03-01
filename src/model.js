@@ -33,7 +33,7 @@ function convertToSchema(colAttributes) {
     });
 
     schema.methods.refresh = function() {
-        this.updated_at = now;
+        this.updated_at = Math.floor(Date.now() / 1000);
         this.save();
     }
 
