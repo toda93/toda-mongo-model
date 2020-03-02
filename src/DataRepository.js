@@ -17,15 +17,15 @@ class DataRepository {
             throw new ErrorException(NOT_INIT_METHOD);
         }
     }
-    async get(options = {}) {
+    async find(options = {}) {
         const Model = this.getModel();
         return Model.find(options);
     }
-    async first(options = {}) {
+    async findOne(options = {}) {
         const Model = this.getModel();
         return Model.findOne(options);
     }
-    async firstById(id) {
+    async findById(id) {
         const Model = this.getModel();
         return Model.findById(id);
     }
