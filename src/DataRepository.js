@@ -67,7 +67,7 @@ class DataRepository {
 
     async modify(model_id, data, guard = [], user_id = null) {
 
-        const item = await this.firstById(model_id);
+        const item = await this.findById(model_id);
         if (item) {
             if (user_id) {
                 item.modified_id = user_id;
