@@ -17,19 +17,19 @@ class DataRepository {
             throw new ErrorException(NOT_INIT_METHOD);
         }
     }
-    async find(options = {}) {
+    find(options = {}) {
         const Model = this.getModel();
         return Model.find(options);
     }
-    async findOne(options = {}) {
+    findOne(options = {}) {
         const Model = this.getModel();
         return Model.findOne(options);
     }
-    async findById(id) {
+    findById(id) {
         const Model = this.getModel();
         return Model.findById(id);
     }
-    async create(data, guard = [], user_id = null) {
+    create(data, guard = [], user_id = null) {
         const Model = this.getModel();
         const item = new Model();
         if (user_id) {
@@ -39,7 +39,7 @@ class DataRepository {
         return this._save(item, data, guard);
     }
 
-    async createWithMeta(data = {}, guard = [], user_id = null) {
+    createWithMeta(data = {}, guard = [], user_id = null) {
         if (data.images && _.isString(data.images)) {
             data.images = JSON.parse(data.images);
             data.thumb = data.images.thumb;
@@ -55,12 +55,12 @@ class DataRepository {
     }
 
 
-    async createByUser(user_id, data = {}, guard = []) {
+    createByUser(user_id, data = {}, guard = []) {
         return this.create(data, guard, user_id);
     }
 
 
-    async createWithMetaByUser(user_id, data = {}, guard = []) {
+    createWithMetaByUser(user_id, data = {}, guard = []) {
         this.createWithMeta(data, guard, user_id);
     }
 
@@ -77,11 +77,11 @@ class DataRepository {
         throw new ErrorException(NOT_EXISTS);
     }
 
-    async modifyByUser(user_id, model_id, data = {}, guard = []) {
+    modifyByUser(user_id, model_id, data = {}, guard = []) {
         return this.modify(model_id, data, guard, user_id);
     }
 
-    async beforeLoadData(data) {
+    beforeLoadData(data) {
 
         if (data.title && !data.slug) {
             data.slug = toSlug(data.title);
@@ -91,7 +91,7 @@ class DataRepository {
     }
 
 
-    async hardDelete(model_id) {
+    hardDelete(model_id) {
         const Model = this.getModel();
         return Model.deleteOne({
             _id: model_id
