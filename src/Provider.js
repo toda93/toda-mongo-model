@@ -1,7 +1,7 @@
-import {ErrorException, NOT_INIT_METHOD} from '@azteam/error';
+import { ErrorException, NOT_INIT_METHOD } from '@azteam/error';
 import mongoose from 'mongoose';
 
-async function registerConnection(name, config) {
+function registerConnection(name, config) {
     let url = `mongodb://`;
     config.shard.map((item, key) => {
         if (key > 0) {
@@ -34,18 +34,18 @@ class Provider {
         this.model = {};
     }
 
-    async bindingModel(model) {
+    bindingModel(model) {
         if (!this.model[model.name]) {
             const dbName = model.database_name;
-            const connection = await this._getConnection(dbName);
+            const connection = this._getConnection(dbName);
             this.model[model.name] = model.register(connection);
         }
         return this.model[model.name];
     }
 
-    async _getConnection(name) {
+    _getConnection(name) {
         if (!this.connections[name]) {
-            this.connections[name] = await registerConnection(name, this.configs[name]);
+            this.connections[name] = registerConnection(name, this.configs[name]);
         }
         return this.connections[name];
     }

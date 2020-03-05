@@ -2,11 +2,7 @@ import { ErrorException, NOT_INIT_METHOD, NOT_EXISTS } from '@azteam/error';
 import { toSlug } from '@azteam/ultilities';
 
 class DataRepository {
-    constructor() {
-        this._model = null;
-        this._fks = [];
-    }
-    init(model, fks = []) {
+    constructor(model, fks) {
         this._model = model;
         this._fks = fks;
     }
