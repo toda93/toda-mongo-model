@@ -21,7 +21,7 @@ function registerConnection(name, config) {
         serverSelectionTimeoutMS: 5000
     };
     try {
-        return mongoose.connect(url, options);
+        return mongoose.createConnection(url, options);
     } catch (e) {
         conssole.log('error', e);
     }
