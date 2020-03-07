@@ -84,7 +84,7 @@ class DataRepository {
 
     beforeLoadData(data) {
 
-        if (data.title && !data.slug) {
+        if ((data.title || data.name) && !data.slug) {
             data.slug = toSlug(data.title);
         }
 
