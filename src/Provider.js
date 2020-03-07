@@ -12,14 +12,17 @@ function registerConnection(name, config) {
 
     const options = {
         dbName: config.database,
-        user: config.username,
-        pass: config.password,
         useNewUrlParser: true,
         useCreateIndex: true,
         useUnifiedTopology: true,
         useFindAndModify: false,
         serverSelectionTimeoutMS: 5000
     };
+
+    config.username && options.user = config.username;
+    config.pass && options.user = config.password;
+
+
     try {
         return mongoose.createConnection(url, options);
     } catch (e) {
