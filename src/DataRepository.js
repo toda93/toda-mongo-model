@@ -34,7 +34,7 @@ class DataRepository {
 
     async findOneOrCreate(options, data, guard = []){
         let item = await this.findOne(options);
-        if(item){
+        if(!item){
             item = await this.create(data, guard);
         }
         return item;
