@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import mongoose, { Schema } from 'mongoose';
 import Double from '@mongoosejs/double';
-import {sanitize} from '@azteam/ultilities';
+import { sanitize } from '@azteam/ultilities';
 
 import {
     ErrorException,
@@ -14,6 +14,62 @@ import {
     SLUG_FORMAT
 } from '@azteam/error';
 
+
+
+export const DataTypes = {
+    DOUBLE: Double,
+    ID: mongoose.Schema.ObjectId,
+    INTEGER: mongoose.Decimal128,
+    OBJECT: mongoose.Mixed,
+    STRING: String,
+    NUMBER: Number,
+    ARRAY: Array,
+}
+
+export const DefaultAttributes = {
+    META_DATA: {
+        metadata_title: {
+            type: DataTypes.STRING,
+        },
+        metadata_keywords: {
+            type: DataTypes.STRING,
+        },
+        metadata_description: {
+            type: DataTypes.STRING,
+        },
+        metadata_image_url: {
+            type: DataTypes.STRING,
+        },
+        metadata_disable: {
+            type: DataTypes.NUMBER,
+            default: 0
+        },
+    },
+
+    MODIFY: {
+        message: {
+            type: DataTypes.STRING,
+        },
+        updated_at: {
+            type: DataTypes.NUMBER,
+            default: 0
+        },
+        created_at: {
+            type: DataTypes.NUMBER,
+            default: 0
+        },
+        created_id: {
+            type: DataTypes.ID,
+        },
+        modified_at: {
+            type: DataTypes.NUMBER,
+            default: 0
+        },
+        modified_id: {
+            type: DataTypes.ID,
+        },
+    },
+}
 
 
 function convertToSchema(colAttributes) {
@@ -74,13 +130,3 @@ class Model {
 }
 
 export default Model;
-
-export const DataTypes = {
-    DOUBLE: Double,
-    ID: mongoose.Schema.ObjectId,
-    INTEGER: mongoose.Decimal128,
-    OBJECT: mongoose.Mixed,
-    STRING: String,
-    NUMBER: Number,
-    ARRAY: Array,
-};

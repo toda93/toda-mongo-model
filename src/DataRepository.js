@@ -25,6 +25,11 @@ class DataRepository {
         const Model = this.getModel();
         return Model.findById(id);
     }
+    findBySlug(slug) {
+        return this.findOne({
+            slug
+        });
+    }
     create(data, guard = [], user_id = null) {
         const Model = this.getModel();
         const item = new Model();
