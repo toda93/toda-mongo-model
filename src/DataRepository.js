@@ -30,6 +30,16 @@ class DataRepository {
             slug
         });
     }
+
+
+    async findOneOrCreate(options, data, guard = []){
+        let item = await this.findOne(options);
+        if(item){
+            item = await this.create(data, guard);
+        }
+        return item;
+    }
+
     create(data, guard = [], user_id = null) {
         const Model = this.getModel();
         const item = new Model();
