@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import mongoose, { Schema } from 'mongoose';
-import mongoosePaginate = 'mongoose-paginate';
+import mongoosePaginate from 'mongoose-paginate';
 
 import Double from '@mongoosejs/double';
 import { sanitize } from '@azteam/ultilities';
