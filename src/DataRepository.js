@@ -56,8 +56,8 @@ class DataRepository {
         }
 
         if (!data.metadata_title) {
-            data.title && data.metadata_title = data.title;
-            data.name && data.metadata_title = data.name;
+            data.title && (data.metadata_title = data.title);
+            data.name && (data.metadata_title = data.name);
         }
         
         data.metadata_keywords = data.metadata_keywords ? data.metadata_keywords : data.metadata_title;
@@ -96,8 +96,8 @@ class DataRepository {
     beforeLoadData(data) {
 
         if (!data.slug) {
-            data.title && data.slug = toSlug(data.title);
-            data.name && data.slug = toSlug(data.name);
+            data.title && (data.slug = toSlug(data.title));
+            data.name && (data.slug = toSlug(data.name));
         }
 
         return data;
