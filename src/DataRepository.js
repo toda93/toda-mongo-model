@@ -32,9 +32,9 @@ class DataRepository {
     }
 
 
-    async findOneOrCreate(options, data, guard = []){
+    async findOneOrCreate(options, data, guard = []) {
         let item = await this.findOne(options);
-        if(!item){
+        if (!item) {
             item = await this.create(data, guard);
         }
         return item;
@@ -51,16 +51,17 @@ class DataRepository {
     }
 
     createWithMeta(data = {}, guard = [], user_id = null) {
-        if (data.images && _.isString(data.images)) {
-            data.images = JSON.parse(data.images);
-            data.thumb = data.images.thumb;
-        }
         if (data.thumb && _.isString(data.thumb)) {
             data.thumb = JSON.parse(data.thumb);
         }
-        data.metadata_title = data.metadata_title ? data.metadata_title : data.title;
-        data.metadata_keywords = data.metadata_keywords ? data.metadata_keywords : data.title;
-        data.metadata_description = data.metadata_description ? data.metadata_description : (data.text_intro ? data.text_intro : data.title);
+
+        if (!data.metadata_title) {
+            data.title && data.metadata_title = data.title;
+            data.name && data.metadata_title = data.name;
+        }
+        
+        data.metadata_keywords = data.metadata_keywords ? data.metadata_keywords : data.metadata_title;
+        data.metadata_description = data.metadata_description ? data.metadata_description : (data.text_intro ? data.text_intro : data.metadata_title);
         data.metadata_image_url = data.metadata_image_url ? data.metadata_image_url : (data.thumb && data.thumb.original ? data.thumb.original : '');
         return this.create(data, guard, user_id);
     }
@@ -94,8 +95,9 @@ class DataRepository {
 
     beforeLoadData(data) {
 
-        if ((data.title || data.name) && !data.slug) {
-            data.slug = toSlug(data.title);
+        if (!data.slug) {
+            data.title && data.slug = toSlug(data.title);
+            data.name && data.slug = toSlug(data.name);
         }
 
         return data;
