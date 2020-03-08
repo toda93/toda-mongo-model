@@ -13,9 +13,18 @@ class DataRepository {
             throw new ErrorException(NOT_INIT_METHOD);
         }
     }
+
+    paginate(options = {}, pageOptions = {
+        page: 1,
+        limit: 100
+    }) {
+        const Model = this.getModel();
+        return Model.paginate(options, pageOptions);
+    }
+
     find(options = {}) {
         const Model = this.getModel();
-        return Model.find(options);
+        return Model.find(options).limit(500);
     }
     findOne(options = {}) {
         const Model = this.getModel();

@@ -1,6 +1,8 @@
 import _ from 'lodash';
 
 import mongoose, { Schema } from 'mongoose';
+import mongoosePaginate = 'mongoose-paginate';
+
 import Double from '@mongoosejs/double';
 import { sanitize } from '@azteam/ultilities';
 
@@ -74,6 +76,8 @@ export const DefaultAttributes = {
 
 function convertToSchema(colAttributes) {
     const schema = new Schema(colAttributes);
+
+    schema.plugin(mongoosePaginate);
 
     schema.pre('save', function(next) {
         const now = Math.floor(Date.now() / 1000);
