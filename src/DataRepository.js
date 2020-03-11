@@ -26,7 +26,7 @@ class DataRepository {
 
     find(options = {}) {
         const Model = this.getModel();
-        return Model.find(options).limit(500);
+        return Model.find(options).limit(2000);
     }
     findOne(options = {}) {
         const Model = this.getModel();
