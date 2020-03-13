@@ -31,11 +31,11 @@ class DataRepository {
         const Model = this.getModel();
         return Model.findOne(options);
     }
-    findById(id) {
+    findOneById(id) {
         const Model = this.getModel();
-        return Model.findById(id);
+        return Model.findOneById(id);
     }
-    findBySlug(slug) {
+    findOneBySlug(slug) {
         return this.findOne({
             slug
         });
@@ -89,7 +89,7 @@ class DataRepository {
 
     async modify(model_id, data, guard = [], user_id = null) {
 
-        const item = await this.findById(model_id);
+        const item = await this.findOneById(model_id);
         if (item) {
             if (user_id) {
                 item.modified_id = user_id;
@@ -104,7 +104,7 @@ class DataRepository {
     }
 
     async modifyWithMeta(model_id, data, guard = [], user_id = null) {
-        const item = await this.findById(model_id);
+        const item = await this.findOneById(model_id);
         if (item) {
             if (user_id) {
                 item.modified_id = user_id;
