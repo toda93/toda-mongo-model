@@ -16,7 +16,7 @@ class DataRepository {
         }
     }
 
-  
+
     find(options = {}, paginate = {}) {
         const Model = this.getModel();
 
@@ -60,6 +60,11 @@ class DataRepository {
         return this._save(item, data, guard);
     }
 
+
+    createByUser(user_id, data = {}, guard = []) {
+        return this.create(data, guard, user_id);
+    }
+
     createWithMeta(data = {}, guard = [], user_id = null) {
         if (data.thumb && _.isString(data.thumb)) {
             data.thumb = JSON.parse(data.thumb);
@@ -73,11 +78,6 @@ class DataRepository {
         data.metadata_keywords = data.metadata_keywords ? data.metadata_keywords : data.metadata_title;
         data.metadata_description = data.metadata_description ? data.metadata_description : (data.text_intro ? data.text_intro : data.metadata_title);
         data.metadata_image_url = data.metadata_image_url ? data.metadata_image_url : (data.thumb && data.thumb.original ? data.thumb.original : '');
-        return this.create(data, guard, user_id);
-    }
-
-
-    createByUser(user_id, data = {}, guard = []) {
         return this.create(data, guard, user_id);
     }
 
@@ -101,6 +101,35 @@ class DataRepository {
 
     modifyByUser(user_id, model_id, data = {}, guard = []) {
         return this.modify(model_id, data, guard, user_id);
+    }
+
+    async modifyWithMeta(model_id, data, guard = [], user_id = null) {
+        const item = await this.findById(model_id);
+        if (item) {
+            if (user_id) {
+                item.modified_id = user_id;
+            }
+
+            if (data.thumb && _.isString(data.thumb)) {
+                data.thumb = JSON.parse(data.thumb);
+            }
+
+            if (!data.metadata_title) {
+                data.title && (data.metadata_title = data.title);
+                data.name && (data.metadata_title = data.name);
+            }
+
+            data.metadata_keywords = data.metadata_keywords ? data.metadata_keywords : data.metadata_title;
+            data.metadata_description = data.metadata_description ? data.metadata_description : (data.text_intro ? data.text_intro : data.metadata_title);
+            data.metadata_image_url = data.metadata_image_url ? data.metadata_image_url : (data.thumb && data.thumb.original ? data.thumb.original : '');
+
+            return this._save(item, data, guard);
+        }
+        throw new ErrorException(NOT_EXISTS);
+    }
+
+    modifyWithMetaByUser(user_id, data = {}, guard = []) {
+        this.modifyWithMeta(data, guard, user_id);
     }
 
     beforeLoadData(data) {
