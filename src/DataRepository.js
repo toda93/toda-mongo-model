@@ -16,17 +16,16 @@ class DataRepository {
         }
     }
 
-    paginate(options = {}, pageOptions = {
-        page: 1,
-        limit: 100
-    }) {
+  
+    find(options = {}, paginate = {}) {
         const Model = this.getModel();
-        return Model.paginate(options, pageOptions);
-    }
 
-    find(options = {}) {
-        const Model = this.getModel();
-        return Model.find(options).limit(2000);
+        if (_.isEmpty(paginate)) {
+            return Model.find(options).limit(2000);
+        } else {
+            return Model.paginate(options, paginate);
+        }
+
     }
     findOne(options = {}) {
         const Model = this.getModel();
@@ -70,7 +69,7 @@ class DataRepository {
             data.title && (data.metadata_title = data.title);
             data.name && (data.metadata_title = data.name);
         }
-        
+
         data.metadata_keywords = data.metadata_keywords ? data.metadata_keywords : data.metadata_title;
         data.metadata_description = data.metadata_description ? data.metadata_description : (data.text_intro ? data.text_intro : data.metadata_title);
         data.metadata_image_url = data.metadata_image_url ? data.metadata_image_url : (data.thumb && data.thumb.original ? data.thumb.original : '');
