@@ -33,7 +33,7 @@ class DataRepository {
     }
     findOneById(id) {
         const Model = this.getModel();
-        return Model.findOneById(id);
+        return Model.findById(id);
     }
     findOneBySlug(slug) {
         return this.findOne({
@@ -50,7 +50,15 @@ class DataRepository {
         return item;
     }
 
-  
+    async findOneOrCreate(options, data, guard = []) {
+        let item = await this.findOne(options);
+        if (!item) {
+            item = await this.create(data, guard);
+        }
+        return item;
+    }
+
+
     create(data = {}, guard = [], user_id = null) {
         if (data.thumb && _.isString(data.thumb)) {
             data.thumb = JSON.parse(data.thumb);
@@ -69,7 +77,7 @@ class DataRepository {
 
 
     createByUser(user_id, data = {}, guard = []) {
-        this.createWithMeta(data, guard, user_id);
+        this.create(data, guard, user_id);
     }
 
 
@@ -99,7 +107,7 @@ class DataRepository {
     }
 
     modifyByUser(user_id, data = {}, guard = []) {
-        this.modifyWithMeta(data, guard, user_id);
+        this.modify(data, guard, user_id);
     }
 
     beforeLoadData(data) {
