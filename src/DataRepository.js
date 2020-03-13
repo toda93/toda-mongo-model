@@ -50,22 +50,8 @@ class DataRepository {
         return item;
     }
 
-    create(data, guard = [], user_id = null) {
-        const Model = this.getModel();
-        const item = new Model();
-        if (user_id) {
-            item.created_id = user_id;
-            item.modified_id = user_id;
-        }
-        return this._save(item, data, guard);
-    }
-
-
-    createByUser(user_id, data = {}, guard = []) {
-        return this.create(data, guard, user_id);
-    }
-
-    createWithMeta(data = {}, guard = [], user_id = null) {
+  
+    create(data = {}, guard = [], user_id = null) {
         if (data.thumb && _.isString(data.thumb)) {
             data.thumb = JSON.parse(data.thumb);
         }
@@ -82,28 +68,12 @@ class DataRepository {
     }
 
 
-    createWithMetaByUser(user_id, data = {}, guard = []) {
+    createByUser(user_id, data = {}, guard = []) {
         this.createWithMeta(data, guard, user_id);
     }
 
 
     async modify(model_id, data, guard = [], user_id = null) {
-
-        const item = await this.findOneById(model_id);
-        if (item) {
-            if (user_id) {
-                item.modified_id = user_id;
-            }
-            return this._save(item, data, guard);
-        }
-        throw new ErrorException(NOT_EXISTS);
-    }
-
-    modifyByUser(user_id, model_id, data = {}, guard = []) {
-        return this.modify(model_id, data, guard, user_id);
-    }
-
-    async modifyWithMeta(model_id, data, guard = [], user_id = null) {
         const item = await this.findOneById(model_id);
         if (item) {
             if (user_id) {
@@ -128,7 +98,7 @@ class DataRepository {
         throw new ErrorException(NOT_EXISTS);
     }
 
-    modifyWithMetaByUser(user_id, data = {}, guard = []) {
+    modifyByUser(user_id, data = {}, guard = []) {
         this.modifyWithMeta(data, guard, user_id);
     }
 
