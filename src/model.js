@@ -110,7 +110,7 @@ function convertToSchema(colAttributes) {
             ];
         } 
         for (const key in data) {
-            if (!_.isEmpty(guard) && !guard.includes(key)) {
+            if (_.isEmpty(guard) || !guard.includes(key)) {
                 this[key] = data[key];
             }
         }
