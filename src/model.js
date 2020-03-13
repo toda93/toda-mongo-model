@@ -108,12 +108,9 @@ function convertToSchema(colAttributes) {
                 'status',
                 'message'
             ];
-        } else {
-            guard = [];
-        }
-
+        } 
         for (const key in data) {
-            if (!guard.includes(key)) {
+            if (!_.isEmpty(guard) && !guard.includes(key)) {
                 this[key] = data[key];
             }
         }
