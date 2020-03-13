@@ -60,6 +60,13 @@ class DataRepository {
 
 
     create(data = {}, guard = [], user_id = null) {
+        const Model = this.getModel();
+        const item = new Model();
+        if (user_id) {
+            item.created_id = user_id;
+            item.modified_id = user_id;
+        }
+
         if (data.thumb && _.isString(data.thumb)) {
             data.thumb = JSON.parse(data.thumb);
         }
@@ -72,7 +79,9 @@ class DataRepository {
         data.metadata_keywords = data.metadata_keywords ? data.metadata_keywords : data.metadata_title;
         data.metadata_description = data.metadata_description ? data.metadata_description : (data.text_intro ? data.text_intro : data.metadata_title);
         data.metadata_image_url = data.metadata_image_url ? data.metadata_image_url : (data.thumb && data.thumb.original ? data.thumb.original : '');
-        return this.create(data, guard, user_id);
+
+
+        return this._save(item, data, guard);
     }
 
 
