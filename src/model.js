@@ -111,7 +111,9 @@ function convertToSchema(colAttributes) {
         } 
         for (const key in data) {
             if (_.isEmpty(guard) || !guard.includes(key)) {
-                this[key] = data[key];
+                if(data[key] !== null && data[key] !== undefined){
+                    this[key] = data[key];
+                }
             }
         }
         return this;
