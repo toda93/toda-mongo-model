@@ -31,9 +31,9 @@ class DataRepository {
         }
 
     }
-    findOne(options = {}) {
+    findOne(query = {}) {
         const Model = this.getModel();
-        return Model.findOne(options);
+        return Model.findOne(query);
     }
     findOneById(id) {
         const Model = this.getModel();
@@ -46,22 +46,13 @@ class DataRepository {
     }
 
 
-    async findOneOrCreate(options, data, guard = []) {
-        let item = await this.findOne(options);
+    async findOneOrCreate(query, data, guard = []) {
+        let item = await this.findOne(query);
         if (!item) {
             item = await this.create(data, guard);
         }
         return item;
     }
-
-    async findOneOrCreate(options, data, guard = []) {
-        let item = await this.findOne(options);
-        if (!item) {
-            item = await this.create(data, guard);
-        }
-        return item;
-    }
-
 
     create(data = {}, guard = [], user_id = null) {
         const Model = this.getModel();
