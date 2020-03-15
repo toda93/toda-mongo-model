@@ -17,18 +17,20 @@ class DataRepository {
     }
 
 
-    find(options = {}, paginate = {}) {
+    find(query = {}, options = {}) {
         const Model = this.getModel();
-        if (_.isEmpty(paginate)) {
+        if (options.page) {
+            return Model.paginate(query, options);
+            
+        } else {
+            let queryBuilder = Model.find(query);
             if (options.sort) {
                 const sort = options.sort;
                 delete options.sort;
 
-                return Model.find(options).sort(sort).limit(2000);
+                queryBuilder =queryBuilder.sort(sort);
             }
-            return Model.find(options).limit(2000);
-        } else {
-            return Model.paginate(options, paginate);
+            return queryBuilder.limit(2000);
         }
 
     }
