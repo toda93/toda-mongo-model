@@ -21,14 +21,11 @@ class DataRepository {
         const Model = this.getModel();
         if (options.page) {
             return Model.paginate(query, options);
-            
+
         } else {
             let queryBuilder = Model.find(query);
             if (options.sort) {
-                const sort = options.sort;
-                delete options.sort;
-
-                queryBuilder =queryBuilder.sort(sort);
+                queryBuilder = queryBuilder.sort(options.sort);
             }
             return queryBuilder.limit(2000);
         }
