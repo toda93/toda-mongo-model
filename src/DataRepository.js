@@ -62,20 +62,6 @@ class DataRepository {
             item.modified_id = user_id;
         }
 
-        if (data.thumb && _.isString(data.thumb)) {
-            data.thumb = JSON.parse(data.thumb);
-        }
-
-        if (!data.metadata_title) {
-            data.title && (data.metadata_title = data.title);
-            data.name && (data.metadata_title = data.name);
-        }
-
-        data.metadata_keywords = data.metadata_keywords ? data.metadata_keywords : data.metadata_title;
-        data.metadata_description = data.metadata_description ? data.metadata_description : (data.text_intro ? data.text_intro : data.metadata_title);
-        data.metadata_image_url = data.metadata_image_url ? data.metadata_image_url : (data.thumb && data.thumb.original ? data.thumb.original : '');
-
-
         return this._save(item, data, guard);
     }
 
@@ -91,19 +77,6 @@ class DataRepository {
             if (user_id) {
                 item.modified_id = user_id;
             }
-
-            if (data.thumb && _.isString(data.thumb)) {
-                data.thumb = JSON.parse(data.thumb);
-            }
-
-            if (!data.metadata_title) {
-                data.title && (data.metadata_title = data.title);
-                data.name && (data.metadata_title = data.name);
-            }
-
-            data.metadata_keywords = data.metadata_keywords ? data.metadata_keywords : data.metadata_title;
-            data.metadata_description = data.metadata_description ? data.metadata_description : (data.text_intro ? data.text_intro : data.metadata_title);
-            data.metadata_image_url = data.metadata_image_url ? data.metadata_image_url : (data.thumb && data.thumb.original ? data.thumb.original : '');
 
             return this._save(item, data, guard);
         }
