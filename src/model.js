@@ -26,6 +26,7 @@ export const DataTypes = {
     STRING: String,
     NUMBER: Number,
     ARRAY: Array,
+    SCHEMA: Schema
 }
 
 export const DefaultAttributes = {
