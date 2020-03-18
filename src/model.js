@@ -19,7 +19,7 @@ import {
 
 
 export {
-    Schema
+    createSchema
 }
 
 export const DataTypes = {
@@ -78,7 +78,7 @@ export const DefaultAttributes = {
 }
 
 
-function convertToSchema(colAttributes) {
+function createSchema(colAttributes) {
     const schema = new Schema(colAttributes);
 
     schema.plugin(mongoosePaginate);
@@ -130,9 +130,7 @@ class Model {
 
         this.connection = connection;
 
-        const schema = convertToSchema(this.col_attributes);
-
-        return this.connection.model(this.name, schema, this.table_name);
+        return this.connection.model(this.name, this.schema, this.table_name);
     }
 }
 

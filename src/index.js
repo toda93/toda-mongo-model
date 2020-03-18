@@ -1,4 +1,4 @@
-import Model, { DataTypes, DefaultAttributes, Schema } from './model';
+import Model, { DataTypes, DefaultAttributes, createSchema } from './model';
 import DataRepository from './DataRepository';
 import Provider from './Provider';
 
@@ -8,5 +8,5 @@ export {
     DataRepository as MongoDataRepository,
     DefaultAttributes as MongoDefaultAttributes,
     Provider as MongoProvider,
-    Schema
+    createSchema
 }
