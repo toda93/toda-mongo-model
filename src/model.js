@@ -18,6 +18,10 @@ import {
 
 
 
+export {
+    Schema
+}
+
 export const DataTypes = {
     DOUBLE: Double,
     ID: mongoose.Schema.ObjectId,
@@ -25,8 +29,7 @@ export const DataTypes = {
     OBJECT: mongoose.Mixed,
     STRING: String,
     NUMBER: Number,
-    ARRAY: Array,
-    SCHEMA: Schema
+    ARRAY: Array
 }
 
 export const DefaultAttributes = {
