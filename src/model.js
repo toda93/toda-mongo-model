@@ -17,6 +17,53 @@ import {
 } from '@azteam/error';
 
 
+function createSchema(colAttributes) {
+    const schema = new Schema(colAttributes);
+
+    schema.plugin(mongoosePaginate);
+
+    schema.pre('save', function(next) {
+        const now = Math.floor(Date.now() / 1000);
+        if (this.isNew) {
+            this.created_at = now;
+        }
+        if (this.isModified()) {
+            this.increment();
+            this.modified_at = now;
+        }
+        this.updated_at = now;
+        next();
+    });
+
+
+    schema.methods.loadData = function(data, guard = []) {
+
+        if (Array.isArray(guard)) {
+            guard = [
+                ...guard,
+                '_id',
+                '__v',
+                'updated_at',
+                'created_at',
+                'created_id',
+                'modified_at',
+                'modified_id',
+                'status',
+                'message'
+            ];
+        } 
+        for (const key in data) {
+            if (_.isEmpty(guard) || !guard.includes(key)) {
+                if(data[key] !== null && data[key] !== undefined){
+                    this[key] = data[key];
+                }
+            }
+        }
+        return this;
+    }
+    return schema;
+}
+
 
 export {
     createSchema
@@ -78,52 +125,6 @@ export const DefaultAttributes = {
 }
 
 
-function createSchema(colAttributes) {
-    const schema = new Schema(colAttributes);
-
-    schema.plugin(mongoosePaginate);
-
-    schema.pre('save', function(next) {
-        const now = Math.floor(Date.now() / 1000);
-        if (this.isNew) {
-            this.created_at = now;
-        }
-        if (this.isModified()) {
-            this.increment();
-            this.modified_at = now;
-        }
-        this.updated_at = now;
-        next();
-    });
-
-
-    schema.methods.loadData = function(data, guard = []) {
-
-        if (Array.isArray(guard)) {
-            guard = [
-                ...guard,
-                '_id',
-                '__v',
-                'updated_at',
-                'created_at',
-                'created_id',
-                'modified_at',
-                'modified_id',
-                'status',
-                'message'
-            ];
-        } 
-        for (const key in data) {
-            if (_.isEmpty(guard) || !guard.includes(key)) {
-                if(data[key] !== null && data[key] !== undefined){
-                    this[key] = data[key];
-                }
-            }
-        }
-        return this;
-    }
-    return schema;
-}
 
 class Model {
     static register(connection) {
