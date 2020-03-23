@@ -7,7 +7,7 @@ function registerConnection(name, config) {
         if (key > 0) {
             url += ',';
         }
-        url += `${item.host}:${item.port}`;
+        url += `${item.host}:${item.port || 27017}`;
     });
 
     const options = {
