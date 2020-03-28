@@ -8,6 +8,7 @@ class DataRepository {
         this._model = model;
         this._fks = fks;
     }
+
     getModel() {
         if (this._model) {
             return this._model;
@@ -19,6 +20,11 @@ class DataRepository {
 
     find(query = {}, options = {}) {
         const Model = this.getModel();
+
+        if (Model.softDelete && !options.force) {
+            query.deleted_at = 0;
+        }
+
         if (options.page) {
             return Model.paginate(query, options);
 
@@ -29,16 +35,24 @@ class DataRepository {
             }
             return queryBuilder.limit(2000);
         }
-
     }
-    findOne(query = {}) {
+
+    findOne(query = {}, options = {}) {
+
         const Model = this.getModel();
+
+        if (Model.softDelete && !options.force) {
+            query.deleted_at = 0;
+        }
+
         return Model.findOne(query);
     }
+
     findOneById(id) {
         const Model = this.getModel();
         return Model.findById(id);
     }
+
     findOneBySlug(slug) {
         return this.findOne({
             slug
@@ -47,11 +61,11 @@ class DataRepository {
 
 
     async findOneOrCreate(query, data, guard = []) {
-        let item = await this.findOne(query);
-        if (!item) {
-            item = await this.create(data, guard);
+        let model = await this.findOne(query);
+        if (!model) {
+            model = await this.create(data, guard);
         }
-        return item;
+        return model;
     }
 
     beforeSave(data) {
@@ -62,22 +76,15 @@ class DataRepository {
         return data;
     }
 
-    beforeCreate(data) {
-        return data;
-    }
 
     create(data = {}, guard = [], user_id = null) {
         const Model = this.getModel();
-        const item = new Model();
+        const model = new Model();
         if (user_id) {
-            item.created_id = user_id;
-            item.modified_id = user_id;
+            model.created_id = user_id;
+            model.modified_id = user_id;
         }
-
-        data = this.beforeSave(data);
-        data = this.beforeCreate(data);
-
-        return this._save(item, data, guard);
+        return this._save(model, data, guard);
     }
 
 
@@ -86,41 +93,51 @@ class DataRepository {
     }
 
 
-    beforeModify(data) {
-        return data;
-    }
-
-    async modify(model_id, data, guard = [], user_id = null) {
-        const item = await this.findOneById(model_id);
-        if (item) {
-            if (user_id) {
-                item.modified_id = user_id;
-            }
-
-            data = this.beforeSave(data);
-            data = this.beforeModify(data);
-
-            return this._save(item, data, guard);
+    async modify(model, data, guard = [], user_id = null) {
+        if (user_id) {
+            model.modified_id = user_id;
         }
-        throw new ErrorException(NOT_EXISTS);
+        return this._save(model, data, guard);
     }
 
-    modifyByUser(user_id, data = {}, guard = []) {
-        this.modify(data, guard, user_id);
+    modifyByUser(model, data = {}, guard = []) {
+        this.modify(data, guard, model);
     }
 
 
-    hardDelete(model_id) {
+
+    deleteOne(model) {
+        if (model.deleted_at) {
+            return this.softDelete();
+        }
+        return this.hardDelete();
+    }
+
+    destroy(model) {
+        return this.hardDelete();
+    }
+
+    restore(model) {
+        model.deleted_at = 0;
+        model.save();
+    }
+
+    _hardDelete(model) {
         const Model = this.getModel();
         return Model.deleteOne({
-            _id: model_id
+            _id: model._id
         });
     }
 
-    async _save(item, data, guard = []) {
+    _softDelete(model) {
+        model.deleted_at = Math.floor(Date.now() / 1000);
+        model.save();
+    }
+
+    async _save(model, data, guard = []) {
         data = await this.beforeLoadData(data);
-        item.loadData(data, guard);
-        return await item.save();
+        model.loadData(data, guard);
+        return await model.save();
     }
 }
 export default DataRepository;

@@ -49,6 +49,11 @@ function createSchema(colAttributes) {
         next();
     });
 
+    if (colAttributes.deleted_at) {
+        schema.static.softDelete = true;
+    }
+
+
     schema.methods.loadData = function(data, guard = []) {
 
         if (Array.isArray(guard)) {
@@ -56,6 +61,7 @@ function createSchema(colAttributes) {
                 ...guard,
                 '_id',
                 '__v',
+                'deleted_at',
                 'updated_at',
                 'created_at',
                 'created_id',
@@ -93,6 +99,13 @@ export const DataTypes = {
 }
 
 export const DefaultAttributes = {
+    SOFT_DELETE: {
+        deleted_at: {
+            type: DataTypes.NUMBER,
+            default: 0
+        }
+    }
+
     META_DATA: {
         metadata_title: {
             type: DataTypes.STRING,
