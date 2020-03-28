@@ -36,6 +36,8 @@ function createSchema(colAttributes) {
     });
 
 
+
+
     schema.methods.loadData = function(data, guard = []) {
 
         if (Array.isArray(guard)) {
@@ -128,7 +130,12 @@ export const DefaultAttributes = {
 
 class Model {
     static register(connection) {
-
+        Object.getOwnPropertyNames(this.prototype).map(method => {
+            if (method !== 'constructor') {
+                this.schema.methods[method] = this.prototype[method];
+            }
+        });
+        
         this.connection = connection;
 
         return this.connection.model(this.name, this.schema, this.table_name);
