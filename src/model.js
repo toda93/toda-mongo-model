@@ -1,10 +1,10 @@
 import _ from 'lodash';
 
-import mongoose, { Schema } from 'mongoose';
+import mongoose, {Schema} from 'mongoose';
 import mongoosePaginate from 'mongoose-paginate-v2';
 
 import Double from '@mongoosejs/double';
-import { sanitize } from '@azteam/ultilities';
+import {sanitize} from '@azteam/ultilities';
 
 import {
     ErrorException,
@@ -22,23 +22,23 @@ function createSchema(colAttributes) {
 
     schema.plugin(mongoosePaginate);
 
-    schema.pre('save', function(next) {
-        const now = Math.floor(Date.now() / 1000);
-        if (this.isNew) {
-            this.created_at = now;
+    schema.pre('save', function (next) {
+
+        if (this.constructor.name !== 'EmbeddedDocument') {
+            const now = Math.floor(Date.now() / 1000);
+            if (this.isNew) {
+                this.created_at = now;
+            }
+            if (this.isModified()) {
+                this.increment();
+                this.modified_at = now;
+            }
+            this.updated_at = now;
         }
-        if (this.isModified()) {
-            this.increment();
-            this.modified_at = now;
-        }
-        this.updated_at = now;
         next();
     });
-
-
-
-
-    schema.methods.loadData = function(data, guard = []) {
+    
+    schema.methods.loadData = function (data, guard = []) {
 
         if (Array.isArray(guard)) {
             guard = [
@@ -53,10 +53,10 @@ function createSchema(colAttributes) {
                 'status',
                 'message'
             ];
-        } 
+        }
         for (const key in data) {
             if (_.isEmpty(guard) || !guard.includes(key)) {
-                if(data[key] !== null && data[key] !== undefined){
+                if (data[key] !== null && data[key] !== undefined) {
                     this[key] = data[key];
                 }
             }
@@ -73,7 +73,7 @@ export {
 
 export const DataTypes = {
     DOUBLE: Double,
-    ID: mongoose.Schema.ObjectId,
+    ID: mongoose.Types.ObjectId,
     INTEGER: mongoose.Decimal128,
     OBJECT: mongoose.Mixed,
     STRING: String,
@@ -127,7 +127,6 @@ export const DefaultAttributes = {
 }
 
 
-
 class Model {
     static register(connection) {
         Object.getOwnPropertyNames(this.prototype).map(method => {
@@ -135,7 +134,7 @@ class Model {
                 this.schema.methods[method] = this.prototype[method];
             }
         });
-        
+
         this.connection = connection;
 
         return this.connection.model(this.name, this.schema, this.table_name);
