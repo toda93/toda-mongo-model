@@ -1,7 +1,6 @@
 import _ from 'lodash';
 
 import { ErrorException, NOT_INIT_METHOD, NOT_EXISTS } from '@azteam/error';
-import { toSlug } from '@azteam/ultilities';
 
 class DataRepository {
     constructor(model, fks = []) {
@@ -127,17 +126,7 @@ class DataRepository {
     }
 
 
-    beforeSave(data) {
-        if (!data.slug) {
-            data.title && (data.slug = toSlug(data.title));
-            data.name && (data.slug = toSlug(data.name));
-        }
-        return data;
-    }
-
-
     async _save(model, data, guard = []) {
-        data = await this.beforeSave(data);
         model.loadData(data, guard);
         return await model.save();
     }

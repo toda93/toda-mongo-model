@@ -4,7 +4,7 @@ import mongoose, { Schema } from 'mongoose';
 import mongoosePaginate from 'mongoose-paginate-v2';
 
 import Double from '@mongoosejs/double';
-import { sanitize } from '@azteam/ultilities';
+import { sanitize, toSlug } from '@azteam/ultilities';
 
 import {
     ErrorException,
@@ -26,9 +26,7 @@ function createSchema(colAttributes) {
 
         if (this.constructor.name !== 'EmbeddedDocument') {
 
-            if (this.beforeSave) {
-                this.beforeSave();
-            }
+            this.beforeSave();
 
             const now = Math.floor(Date.now() / 1000);
             if (this.isNew) {
@@ -151,6 +149,15 @@ export const DefaultAttributes = {
 
 
 class Model {
+
+    beforeSave() {
+        if (!this.slug) {
+            this.title && (this.slug = toSlug(this.title));
+            this.name && (this.slug = toSlug(this.name));
+        }
+    }
+
+
     static register(connection) {
         Object.getOwnPropertyNames(this.prototype).map(method => {
             if (method !== 'constructor') {
