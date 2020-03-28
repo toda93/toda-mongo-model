@@ -104,8 +104,7 @@ export const DefaultAttributes = {
             type: DataTypes.NUMBER,
             default: 0
         }
-    }
-
+    },
     META_DATA: {
         metadata_title: {
             type: DataTypes.STRING,
