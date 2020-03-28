@@ -108,13 +108,13 @@ class DataRepository {
 
     deleteOne(model) {
         if (model.deleted_at) {
-            return this.softDelete();
+            return this._softDelete();
         }
-        return this.hardDelete();
+        return this._hardDelete();
     }
 
     destroy(model) {
-        return this.hardDelete();
+        return this._hardDelete();
     }
 
     restore(model) {
