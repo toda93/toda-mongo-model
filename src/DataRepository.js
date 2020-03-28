@@ -68,14 +68,6 @@ class DataRepository {
         return model;
     }
 
-    beforeSave(data) {
-        if (!data.slug) {
-            data.title && (data.slug = toSlug(data.title));
-            data.name && (data.slug = toSlug(data.name));
-        }
-        return data;
-    }
-
 
     create(data = {}, guard = [], user_id = null) {
         const Model = this.getModel();
@@ -134,8 +126,18 @@ class DataRepository {
         model.save();
     }
 
+
+    beforeSave(data) {
+        if (!data.slug) {
+            data.title && (data.slug = toSlug(data.title));
+            data.name && (data.slug = toSlug(data.name));
+        }
+        return data;
+    }
+
+
     async _save(model, data, guard = []) {
-        data = await this.beforeLoadData(data);
+        data = await this.beforeSave(data);
         model.loadData(data, guard);
         return await model.save();
     }
