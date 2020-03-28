@@ -54,6 +54,18 @@ class DataRepository {
         return item;
     }
 
+    beforeSave(data) {
+        if (!data.slug) {
+            data.title && (data.slug = toSlug(data.title));
+            data.name && (data.slug = toSlug(data.name));
+        }
+        return data;
+    }
+
+    beforeCreate(data) {
+        return data;
+    }
+
     create(data = {}, guard = [], user_id = null) {
         const Model = this.getModel();
         const item = new Model();
@@ -61,6 +73,9 @@ class DataRepository {
             item.created_id = user_id;
             item.modified_id = user_id;
         }
+
+        data = this.beforeSave(data);
+        data = this.beforeCreate(data);
 
         return this._save(item, data, guard);
     }
@@ -71,12 +86,19 @@ class DataRepository {
     }
 
 
+    beforeModify(data) {
+        return data;
+    }
+
     async modify(model_id, data, guard = [], user_id = null) {
         const item = await this.findOneById(model_id);
         if (item) {
             if (user_id) {
                 item.modified_id = user_id;
             }
+
+            data = this.beforeSave(data);
+            data = this.beforeModify(data);
 
             return this._save(item, data, guard);
         }
@@ -87,23 +109,12 @@ class DataRepository {
         this.modify(data, guard, user_id);
     }
 
-    beforeLoadData(data) {
-
-        if (!data.slug) {
-            data.title && (data.slug = toSlug(data.title));
-            data.name && (data.slug = toSlug(data.name));
-        }
-
-        return data;
-    }
-
 
     hardDelete(model_id) {
         const Model = this.getModel();
         return Model.deleteOne({
             _id: model_id
         });
-
     }
 
     async _save(item, data, guard = []) {
