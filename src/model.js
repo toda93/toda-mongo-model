@@ -1,10 +1,10 @@
 import _ from 'lodash';
 
-import mongoose, {Schema} from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import mongoosePaginate from 'mongoose-paginate-v2';
 
 import Double from '@mongoosejs/double';
-import {sanitize} from '@azteam/ultilities';
+import { sanitize } from '@azteam/ultilities';
 
 import {
     ErrorException,
@@ -22,14 +22,25 @@ function createSchema(colAttributes) {
 
     schema.plugin(mongoosePaginate);
 
-    schema.pre('save', function (next) {
+    schema.pre('save', function(next) {
 
         if (this.constructor.name !== 'EmbeddedDocument') {
+
+            if (this.beforeSave) {
+                this.beforeSave();
+            }
+
             const now = Math.floor(Date.now() / 1000);
             if (this.isNew) {
+                if (this.beforeCreate) {
+                    this.beforeCreate();
+                }
                 this.created_at = now;
             }
             if (this.isModified()) {
+                if (this.beforeModify) {
+                    this.beforeModify();
+                }
                 this.increment();
                 this.modified_at = now;
             }
@@ -37,8 +48,8 @@ function createSchema(colAttributes) {
         }
         next();
     });
-    
-    schema.methods.loadData = function (data, guard = []) {
+
+    schema.methods.loadData = function(data, guard = []) {
 
         if (Array.isArray(guard)) {
             guard = [
