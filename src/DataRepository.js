@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { ErrorException, NOT_INIT_METHOD, NOT_EXISTS } from '@azteam/error';
+import {ErrorException, NOT_INIT_METHOD, NOT_EXISTS} from '@azteam/error';
 
 class DataRepository {
     constructor(model, fks = []) {
@@ -19,7 +19,7 @@ class DataRepository {
 
     find(query = {}, options = {}) {
         const Model = this.getModel();
-
+        
         if (Model.softDelete && !options.force) {
             query.deleted_at = 0;
         }
@@ -37,19 +37,17 @@ class DataRepository {
     }
 
     findOne(query = {}, options = {}) {
-
         const Model = this.getModel();
-
         if (Model.softDelete && !options.force) {
             query.deleted_at = 0;
         }
-
         return Model.findOne(query);
     }
 
-    findOneById(id) {
-        const Model = this.getModel();
-        return Model.findById(id);
+    findOneById(_id, options = {}) {
+        return this.findOne({
+            _id
+        });
     }
 
     findOneBySlug(slug) {
@@ -96,9 +94,8 @@ class DataRepository {
     }
 
 
-
     deleteOne(model) {
-        if (model.deleted_at) {
+        if (model.deleted_at !== 'undefined') {
             return this._softDelete(model);
         }
         return this._hardDelete(model);
@@ -110,7 +107,7 @@ class DataRepository {
 
     restore(model) {
         model.deleted_at = 0;
-        model.save();
+        return model.save();
     }
 
     _hardDelete(model) {
@@ -131,4 +128,5 @@ class DataRepository {
         return await model.save();
     }
 }
+
 export default DataRepository;

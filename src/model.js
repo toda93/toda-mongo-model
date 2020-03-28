@@ -48,7 +48,7 @@ function createSchema(colAttributes) {
     });
 
     if (colAttributes.deleted_at) {
-        schema.static.softDelete = true;
+        schema.statics.softDelete = true;
     }
 
 
@@ -151,6 +151,7 @@ export const DefaultAttributes = {
 class Model {
 
     beforeSave() {
+        console.log('before Save Model');
         if (!this.slug) {
             this.title && (this.slug = toSlug(this.title));
             this.name && (this.slug = toSlug(this.name));
@@ -159,7 +160,12 @@ class Model {
 
 
     static register(connection) {
-        Object.getOwnPropertyNames(this.prototype).map(method => {
+        const prototypes = [
+            ...Object.getOwnPropertyNames(Model.prototype),
+            ...Object.getOwnPropertyNames(this.prototype),
+        ];
+        
+        prototypes.map(method => {
             if (method !== 'constructor') {
                 this.schema.methods[method] = this.prototype[method];
             }
