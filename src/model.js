@@ -151,7 +151,6 @@ export const DefaultAttributes = {
 class Model {
 
     beforeSave() {
-        console.log('before Save Model');
         if (!this.slug) {
             this.title && (this.slug = toSlug(this.title));
             this.name && (this.slug = toSlug(this.name));
