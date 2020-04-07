@@ -94,8 +94,8 @@ class DataRepository {
     }
 
 
-    deleteOne(model) {
-        if (model.deleted_at !== 'undefined') {
+    delete(model) {
+        if (typeof model.deleted_at !== 'undefined') {
             return this._softDelete(model);
         }
         return this._hardDelete(model);
