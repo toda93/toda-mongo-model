@@ -78,6 +78,9 @@ function createSchema(colAttributes) {
         }
         return this;
     }
+
+    schema.virtual('id').get(function() { return this._id; });
+
     return schema;
 }
 
