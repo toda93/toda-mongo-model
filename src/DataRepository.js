@@ -78,7 +78,7 @@ class DataRepository {
 
 
     createByUser(user_id, data = {}, guard = []) {
-        this.create(data, guard, user_id);
+        return this.create(data, guard, user_id);
     }
 
 
@@ -90,7 +90,7 @@ class DataRepository {
     }
 
     modifyByUser(model, data = {}, guard = []) {
-        this.modify(data, guard, model);
+        return this.modify(data, guard, model);
     }
 
 
