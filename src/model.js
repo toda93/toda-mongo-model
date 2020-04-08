@@ -81,6 +81,10 @@ function createSchema(colAttributes) {
 
     schema.virtual('id').get(function() { return this._id; });
 
+    schema.set('toJSON', {
+        virtuals: true
+    });
+
     return schema;
 }
 
@@ -166,7 +170,7 @@ class Model {
             ...Object.getOwnPropertyNames(Model.prototype),
             ...Object.getOwnPropertyNames(this.prototype),
         ];
-        
+
         prototypes.map(method => {
             if (method !== 'constructor') {
                 this.schema.methods[method] = this.prototype[method];
