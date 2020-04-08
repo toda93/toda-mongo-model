@@ -18,7 +18,9 @@ import {
 
 
 function createSchema(colAttributes) {
-    const schema = new Schema(colAttributes);
+    const schema = new Schema(colAttributes, {
+        toJSON: { virtuals: true }
+    });
 
     schema.plugin(mongoosePaginate);
 
@@ -81,9 +83,6 @@ function createSchema(colAttributes) {
 
     schema.virtual('id').get(function() { return this._id; });
 
-    schema.set('toJSON', {
-        virtuals: true
-    });
 
     return schema;
 }
