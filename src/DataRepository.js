@@ -89,8 +89,8 @@ class DataRepository {
         return this._save(model, data, guard);
     }
 
-    modifyByUser(model, data = {}, guard = []) {
-        return this.modify(data, guard, model);
+    modifyByUser(user_id, model, data = {}, guard = []) {
+        return this.modify(data, guard, model, user_id);
     }
 
 
