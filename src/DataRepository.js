@@ -90,7 +90,7 @@ class DataRepository {
     }
 
     modifyByUser(user_id, model, data = {}, guard = []) {
-        return this.modify(data, guard, model, user_id);
+        return this.modify(model, data, guard, user_id);
     }
 
 
