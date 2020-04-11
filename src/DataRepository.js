@@ -17,6 +17,11 @@ class DataRepository {
     }
 
 
+    count(query) {
+         const Model = this.getModel();
+         return Model.count(query);
+    }
+
     find(query = {}, options = {}) {
         const Model = this.getModel();
         
