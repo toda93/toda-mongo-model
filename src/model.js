@@ -1,41 +1,33 @@
 import _ from 'lodash';
 
-import mongoose, { Schema } from 'mongoose';
+import mongoose, {Schema} from 'mongoose';
 import mongoosePaginate from 'mongoose-paginate-v2';
 
 import Double from '@mongoosejs/double';
-import { sanitize, toSlug } from '@azteam/ultilities';
-
-import {
-    ErrorException,
-    EMAIL_FORMAT,
-    INT_FORMAT,
-    JSON_FORMAT,
-    NOT_EMPTY,
-    PHONE_NUMBER_FORMAT,
-    SLUG_FORMAT
-} from '@azteam/error';
-
-
-function decimal2JSON(ret) {
-    if (ret.constructor.name === 'Decimal128') return ret.toString();
-    return ret;
-};
+import {toSlug} from '@azteam/ultilities';
 
 
 function createSchema(colAttributes) {
+    const decimals = _.reduce(colAttributes, (result, col, key) => {
+        if (col.type && col.type.name === 'Decimal128') result.push(key);
+        return result;
+    }, []);
+
     const schema = new Schema(colAttributes, {
         toJSON: {
             virtuals: true,
             transform: (doc, ret) => {
-                return decimal2JSON(ret);
+                decimals.map(key => {
+                    ret[key] = parseInt(ret[key]);
+                });
+                return ret;
             }
         }
     });
 
     schema.plugin(mongoosePaginate);
 
-    schema.pre('save', function(next) {
+    schema.pre('save', function (next) {
 
         if (this.constructor.name !== 'EmbeddedDocument') {
 
@@ -65,7 +57,7 @@ function createSchema(colAttributes) {
     }
 
 
-    schema.methods.loadData = function(data, guard = []) {
+    schema.methods.loadData = function (data, guard = []) {
 
         if (Array.isArray(guard)) {
             guard = [
@@ -92,7 +84,9 @@ function createSchema(colAttributes) {
         return this;
     }
 
-    schema.virtual('id').get(function() { return this._id; });
+    schema.virtual('id').get(function () {
+        return this._id;
+    });
 
     return schema;
 }
