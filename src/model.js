@@ -25,7 +25,12 @@ function decimal2JSON(ret) {
 
 function createSchema(colAttributes) {
     const schema = new Schema(colAttributes, {
-        toJSON: { virtuals: true }
+        toJSON: {
+            virtuals: true,
+            transform: (doc, ret) => {
+                return decimal2JSON(ret);
+            }
+        }
     });
 
     schema.plugin(mongoosePaginate);
@@ -88,12 +93,6 @@ function createSchema(colAttributes) {
     }
 
     schema.virtual('id').get(function() { return this._id; });
-
-    schema.set('toJSON', {
-        transform: (doc, ret) => {
-            return decimal2JSON(ret);
-        }
-    });
 
     return schema;
 }
