@@ -17,6 +17,12 @@ import {
 } from '@azteam/error';
 
 
+function decimal2JSON(ret) {
+    if (ret.constructor.name === 'Decimal128') return ret.toString();
+    return ret;
+};
+
+
 function createSchema(colAttributes) {
     const schema = new Schema(colAttributes, {
         toJSON: { virtuals: true }
@@ -83,6 +89,11 @@ function createSchema(colAttributes) {
 
     schema.virtual('id').get(function() { return this._id; });
 
+    schema.set('toJSON', {
+        transform: (doc, ret) => {
+            return decimal2JSON(ret);
+        }
+    });
 
     return schema;
 }
