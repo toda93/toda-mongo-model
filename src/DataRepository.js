@@ -134,7 +134,7 @@ class DataRepository {
 
 
     async _save(model, data, guard = []) {
-        data = this.beforeLoadData();
+        data = this.beforeLoadData(data);
         model.loadData(data, guard);
         return await model.save();
     }
