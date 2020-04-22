@@ -128,7 +128,7 @@ class DataRepository {
     }
 
 
-    beforeLoadData() {
+    beforeLoadData(data) {
         return data;
     }
 
