@@ -1,10 +1,10 @@
 import _ from 'lodash';
 
-import mongoose, {Schema} from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import mongoosePaginate from 'mongoose-paginate-v2';
 
 import Double from '@mongoosejs/double';
-import {toSlug} from '@azteam/ultilities';
+import { toSlug } from '@azteam/ultilities';
 
 
 function createSchema(colAttributes) {
@@ -27,7 +27,7 @@ function createSchema(colAttributes) {
 
     schema.plugin(mongoosePaginate);
 
-    schema.pre('save', function (next) {
+    schema.pre('save', function(next) {
 
         if (this.constructor.name !== 'EmbeddedDocument') {
 
@@ -57,7 +57,7 @@ function createSchema(colAttributes) {
     }
 
 
-    schema.methods.loadData = function (data, guard = []) {
+    schema.methods.loadData = function(data, guard = []) {
 
         if (Array.isArray(guard)) {
             guard = [
@@ -84,7 +84,7 @@ function createSchema(colAttributes) {
         return this;
     }
 
-    schema.virtual('id').get(function () {
+    schema.virtual('id').get(function() {
         return this._id;
     });
 
@@ -167,6 +167,13 @@ class Model {
         }
     }
 
+    beforeCreate() {
+
+    }
+
+    beforeModify() {
+
+    }
 
     static register(connection) {
         const prototypes = [
