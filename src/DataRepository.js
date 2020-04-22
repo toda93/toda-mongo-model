@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import {ErrorException, NOT_INIT_METHOD, NOT_EXISTS} from '@azteam/error';
+import { ErrorException, NOT_INIT_METHOD, NOT_EXISTS } from '@azteam/error';
 
 class DataRepository {
     constructor(model, fks = []) {
@@ -18,13 +18,13 @@ class DataRepository {
 
 
     count(query) {
-         const Model = this.getModel();
-         return Model.countDocuments(query);
+        const Model = this.getModel();
+        return Model.countDocuments(query);
     }
 
     find(query = {}, options = {}) {
         const Model = this.getModel();
-        
+
         if (Model.softDelete && !options.force) {
             query.deleted_at = 0;
         }
@@ -128,7 +128,13 @@ class DataRepository {
     }
 
 
+    beforeLoadData() {
+        return data;
+    }
+
+
     async _save(model, data, guard = []) {
+        data = this.beforeLoadData();
         model.loadData(data, guard);
         return await model.save();
     }
