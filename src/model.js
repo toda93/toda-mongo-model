@@ -9,7 +9,10 @@ import { toSlug } from '@azteam/ultilities';
 
 function createSchema(colAttributes) {
     const decimals = _.reduce(colAttributes, (result, col, key) => {
-        if (col.type && col.type.name === 'Decimal128') result.push(key);
+        if (col.type && col.type.name === 'Decimal128') {
+            colAttributes[key].get = (val) => parseInt(val);
+            result.push(key);
+        }
         return result;
     }, []);
 
