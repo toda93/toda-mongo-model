@@ -71,31 +71,32 @@ class DataRepository {
     }
 
 
-    create(data = {}, guard = [], user_id = null) {
+    create(data = {}, guard = [], allows = [], user_id = null) {
         const Model = this.getModel();
         const model = new Model();
-        if (user_id) {
-            model.created_id = user_id;
-            model.modified_id = user_id;
-        }
-        return this._save(model, data, guard);
+        return this._save(model, data, guard, allows);
     }
 
 
-    createByUser(user_id, data = {}, guard = []) {
-        return this.create(data, guard, user_id);
+    createByUser(user_id, data = {}, guard = [], allows = []) {
+        const Model = this.getModel();
+        const model = new Model();
+
+        model.created_id = user_id;
+        model.modified_id = user_id;
+
+        return this._save(model, data, guard, allows);
+
     }
 
 
-    async modify(model, data, guard = [], user_id = null) {
-        if (user_id) {
-            model.modified_id = user_id;
-        }
-        return this._save(model, data, guard);
+    async modify(model, data, guard = [], allows = [], user_id = null) {
+        return this._save(model, data, guard, allows);
     }
 
-    modifyByUser(user_id, model, data = {}, guard = []) {
-        return this.modify(model, data, guard, user_id);
+    modifyByUser(user_id, model, data = {}, guard = [], allows = []) {
+        model.modified_id = user_id;
+        return this._save(model, data, guard, allows);
     }
 
 
@@ -133,9 +134,9 @@ class DataRepository {
     }
 
 
-    async _save(model, data, guard = []) {
+    async _save(model, data, guard = [], allows = []) {
         data = this.beforeLoadData(data);
-        model.loadData(data, guard);
+        model.loadData(data, guard, allows);
         return await model.save();
     }
 }

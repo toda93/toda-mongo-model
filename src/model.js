@@ -60,23 +60,24 @@ function createSchema(colAttributes) {
     }
 
 
-    schema.methods.loadData = function(data, guard = []) {
+    schema.methods.loadData = function(data, guard = [], allows = []) {
 
-        if (Array.isArray(guard)) {
-            guard = [
-                ...guard,
-                '_id',
-                '__v',
-                'deleted_at',
-                'updated_at',
-                'created_at',
-                'created_id',
-                'modified_at',
-                'modified_id',
-                'status',
-                'message'
-            ];
-        }
+        guard = [
+            ...guard,
+            '_id',
+            '__v',
+            'deleted_at',
+            'updated_at',
+            'created_at',
+            'created_id',
+            'modified_at',
+            'modified_id',
+            'status',
+            'message'
+        ];
+        guard = _.difference(guard, allows);
+
+
         for (const key in data) {
             if (_.isEmpty(guard) || !guard.includes(key)) {
                 if (data[key] !== null && data[key] !== undefined) {
