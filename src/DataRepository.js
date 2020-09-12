@@ -37,7 +37,8 @@ class DataRepository {
             if (options.sort) {
                 queryBuilder = queryBuilder.sort(options.sort);
             }
-            return queryBuilder.limit(2000);
+            const limit = options.limit && options.limit < 2000 ? options.limit : 2000;
+            return queryBuilder.limit(limit);
         }
     }
 
