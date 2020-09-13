@@ -29,22 +29,18 @@ class DataRepository {
             query.deleted_at = 0;
         }
 
-        if (options.page) {
-            return Model.paginate(query, options);
-
-        } else {
-            let queryBuilder = Model.find(query);
-            if (!options.sort) {
+        if (!options.sort) {
                 options.sort = {
                     modified_at: 'desc'
                 }
             }
 
+        if (options.page) {
+            return Model.paginate(query, options);
 
-            console.info('options.sort', options.sort);
-
-            queryBuilder = queryBuilder.sort(options.sort);
-
+        } else {
+            let queryBuilder = Model.find(query).sort(options.sort);
+            
             const limit = options.limit && options.limit < 2000 ? options.limit : 2000;
             return queryBuilder.limit(limit);
         }
