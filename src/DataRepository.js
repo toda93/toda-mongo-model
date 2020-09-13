@@ -34,9 +34,13 @@ class DataRepository {
 
         } else {
             let queryBuilder = Model.find(query);
-            if (options.sort) {
-                queryBuilder = queryBuilder.sort(options.sort);
+            if (!options.sort) {
+                options.sort = {
+                    modified_at: 'desc'
+                }
             }
+            queryBuilder = queryBuilder.sort(options.sort);
+
             const limit = options.limit && options.limit < 2000 ? options.limit : 2000;
             return queryBuilder.limit(limit);
         }
