@@ -30,17 +30,17 @@ class DataRepository {
         }
 
         if (!options.sort) {
-                options.sort = {
-                    modified_at: 'desc'
-                }
+            options.sort = {
+                modified_at: 'desc'
             }
+        }
 
         if (options.page) {
             return Model.paginate(query, options);
 
         } else {
             let queryBuilder = Model.find(query).sort(options.sort);
-            
+
             const limit = options.limit && options.limit < 2000 ? options.limit : 2000;
             return queryBuilder.limit(limit);
         }
