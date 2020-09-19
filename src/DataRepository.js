@@ -46,6 +46,13 @@ class DataRepository {
         }
     }
 
+
+    findActivated(query = {}, options = {}){
+        query.status = 1;
+        return this.find(query, options);
+    }
+
+
     findOne(query = {}, options = {}) {
         const Model = this.getModel();
         if (Model.softDelete && !options.force) {
@@ -53,6 +60,12 @@ class DataRepository {
         }
         return Model.findOne(query);
     }
+
+    findOneActivated(query = {}, options = {}){
+        query.status = 1;
+        return this.findOne(query, options);
+    }
+
 
     findOneById(_id, options = {}) {
         return this.findOne({
