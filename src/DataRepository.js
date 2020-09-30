@@ -80,10 +80,10 @@ class DataRepository {
     }
 
 
-    async findOneOrCreate(query, data, guard = []) {
+    async findOneOrCreate(query, data, guard = [], allows = []) {
         let model = await this.findOne(query);
         if (!model) {
-            model = await this.create(data, guard);
+            model = await this.create(data, guard, allows);
         }
         return model;
     }
