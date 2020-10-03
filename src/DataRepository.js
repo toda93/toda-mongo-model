@@ -47,7 +47,7 @@ class DataRepository {
     }
 
 
-    findActivated(query = {}, options = {}){
+    findActivated(query = {}, options = {}) {
         query.status = 1;
         return this.find(query, options);
     }
@@ -61,7 +61,7 @@ class DataRepository {
         return Model.findOne(query);
     }
 
-    findOneActivated(query = {}, options = {}){
+    findOneActivated(query = {}, options = {}) {
         query.status = 1;
         return this.findOne(query, options);
     }
@@ -70,13 +70,13 @@ class DataRepository {
     findOneById(_id, options = {}) {
         return this.findOne({
             _id
-        });
+        }, {});
     }
 
-    findOneBySlug(slug) {
+    findOneBySlug(slug, options = {}) {
         return this.findOne({
             slug
-        });
+        }, {});
     }
 
 
