@@ -43,7 +43,7 @@ function createSchema(colAttributes) {
                 }
                 this.created_at = now;
             }
-            if (this.isModified()) {
+            if (this.isModified() && !this.forceModify) {
                 if (this.beforeModify) {
                     this.beforeModify();
                 }
@@ -75,7 +75,11 @@ function createSchema(colAttributes) {
             'status',
             'message'
         ];
-        guard = _.difference(guard, allows);
+        if (allows === '*') {
+            guard = [];
+        } else if (Array.isArray(allows)) {
+            guard = _.difference(guard, allows);
+        }
 
 
         for (const key in data) {

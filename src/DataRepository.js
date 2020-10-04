@@ -112,6 +112,14 @@ class DataRepository {
         return this._save(model, data, guard, allows);
     }
 
+    modifyForce(model, data) {
+        return this._save(model, {
+            ...data,
+            forceModify: true
+        }, [], '*');
+    }
+
+
     modifyByUser(user_id, model, data = {}, guard = [], allows = []) {
         model.modified_id = user_id;
         return this._save(model, data, guard, allows);
