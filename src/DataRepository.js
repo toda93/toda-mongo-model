@@ -95,8 +95,8 @@ class DataRepository {
         return this._save(model, data, guard, allows);
     }
 
-    createForce(model, data) {
-        return this._save(model, {
+    createForce(data) {
+        return this.create({
             ...data,
             forceCreate: true
         }, [], '*');
@@ -120,7 +120,7 @@ class DataRepository {
     }
 
     modifyForce(model, data) {
-        return this._save(model, {
+        return this.modify(model, {
             ...data,
             forceModify: true
         }, [], '*');
