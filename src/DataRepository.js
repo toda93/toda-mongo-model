@@ -95,6 +95,13 @@ class DataRepository {
         return this._save(model, data, guard, allows);
     }
 
+    createForce(model, data) {
+        return this._save(model, {
+            ...data,
+            forceCreate: true
+        }, [], '*');
+    }
+
 
     createByUser(user_id, data = {}, guard = [], allows = []) {
         const Model = this.getModel();

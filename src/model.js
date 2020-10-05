@@ -37,20 +37,25 @@ function createSchema(colAttributes) {
             this.beforeSave();
 
             const now = Math.floor(Date.now() / 1000);
-            if (this.isNew) {
-                if (this.beforeCreate) {
-                    this.beforeCreate();
+
+
+            if (!this.forceCreate) {
+                if (this.isNew) {
+                    if (this.beforeCreate) {
+                        this.beforeCreate();
+                    }
+                    this.created_at = now;
                 }
-                this.created_at = now;
-            }
-            if (this.isModified() && !this.forceModify) {
-                if (this.beforeModify) {
-                    this.beforeModify();
+                if (this.isModified() && !this.forceModify) {
+                    if (this.beforeModify) {
+                        this.beforeModify();
+                    }
+                    this.increment();
+                    this.modified_at = now;
                 }
-                this.increment();
-                this.modified_at = now;
+                this.updated_at = now;
             }
-            this.updated_at = now;
+
         }
         next();
     });
