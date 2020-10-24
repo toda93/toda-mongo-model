@@ -35,6 +35,11 @@ class DataRepository {
             }
         }
 
+        if (options.forceDisableSort) {
+            delete options.sort;
+        }
+
+
         if (options.page) {
             return Model.paginate(query, options);
 
