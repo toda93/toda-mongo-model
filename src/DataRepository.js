@@ -57,6 +57,25 @@ class DataRepository {
         return this.find(query, options);
     }
 
+    findNear(geo = {name = 'geo', coords: [], maxDistance = 15000}, query = {}, options = {}) {
+
+        query[geo.name] = {
+            $nearSphere: {
+                $geometry: {
+                    type: 'Point',
+                    coordinates: geo.coords
+                },
+                $maxDistance: geo.maxDistance
+            }
+        }
+
+        return this.find(query, {
+            ...options,
+            forceCountFn: true,
+            forceDisableSort: true,
+        })
+    }
+
 
     findOne(query = {}, options = {}) {
         const Model = this.getModel();
