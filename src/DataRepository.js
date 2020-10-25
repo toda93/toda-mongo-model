@@ -65,13 +65,24 @@ class DataRepository {
             ...geo
         }
 
-        query[geo.name] = {
-            $nearSphere: {
-                $geometry: {
-                    type: 'Point',
-                    coordinates: geo.coords
-                },
-                $maxDistance: geo.maxDistance
+        if (geo.maxDistance) {
+            query[geo.name] = {
+                $nearSphere: {
+                    $geometry: {
+                        type: 'Point',
+                        coordinates: geo.coords
+                    },
+                    $maxDistance: geo.maxDistance
+                }
+            }
+        } else {
+            query[geo.name] = {
+                $nearSphere: {
+                    $geometry: {
+                        type: 'Point',
+                        coordinates: geo.coords
+                    },
+                }
             }
         }
 
