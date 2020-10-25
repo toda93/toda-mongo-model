@@ -62,7 +62,6 @@ class DataRepository {
         geo = {
             name: 'geo',
             coords: [],
-            maxDistance: 15000,
             ...geo
         }
 
