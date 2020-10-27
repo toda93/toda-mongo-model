@@ -107,6 +107,38 @@ class DataRepository {
         return this.findOne(query, options);
     }
 
+    findOneNear(geo = {}, query = {}, options = {}) {
+
+        geo = {
+            name: 'geo',
+            coords: [],
+            ...geo
+        }
+
+        if (geo.maxDistance) {
+            query[geo.name] = {
+                $nearSphere: {
+                    $geometry: {
+                        type: 'Point',
+                        coordinates: geo.coords
+                    },
+                    $maxDistance: geo.maxDistance
+                }
+            }
+        } else {
+            query[geo.name] = {
+                $nearSphere: {
+                    $geometry: {
+                        type: 'Point',
+                        coordinates: geo.coords
+                    },
+                }
+            }
+        }
+
+        return this.findOne(query, options)
+    }
+
 
     findOneById(_id, options = {}) {
         return this.findOne({
