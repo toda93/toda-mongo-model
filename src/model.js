@@ -76,9 +76,7 @@ function createSchema(colAttributes) {
             'created_at',
             'created_id',
             'modified_at',
-            'modified_id',
-            'status',
-            'message'
+            'modified_id'
         ];
         if (allows === '*') {
             guard = [];
