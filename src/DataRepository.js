@@ -19,6 +19,9 @@ class DataRepository {
 
     count(query) {
         const Model = this.getModel();
+        if (Model.softDelete && !options.force) {
+            query.deleted_at = 0;
+        }
         return Model.countDocuments(query);
     }
 
