@@ -1,5 +1,6 @@
-import { ErrorException, NOT_INIT_METHOD } from '@azteam/error';
+import _ from 'lodash';
 import mongoose from 'mongoose';
+import { ErrorException, NOT_INIT_METHOD } from '@azteam/error';
 
 function registerConnection(name, config) {
     let url = `mongodb://`;
@@ -32,6 +33,12 @@ class Provider {
         this.configs = configs;
         this.connections = {};
         this.model = {};
+    }
+
+    closeAll() {
+        _.map(this.connections, (connection) => {
+            connection.close();
+        });
     }
 
     bindingModel(model) {
