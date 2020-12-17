@@ -19,7 +19,7 @@ function registerConnection(name, config) {
         useCreateIndex: true,
         useUnifiedTopology: true,
         useFindAndModify: false,
-        serverSelectionTimeoutMS: 5000
+        // serverSelectionTimeoutMS: 5000
     };
     try {
         return mongoose.createConnection(url, options);
