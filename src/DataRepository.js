@@ -215,6 +215,12 @@ class DataRepository {
         }
         return this._hardDelete(model);
     }
+    deleteByUser(user_id, model) {
+        if (typeof model.deleted_at !== 'undefined') {
+            return this._softDelete(model, user_id);
+        }
+        return this._hardDelete(model);
+    }
 
     destroy(model) {
         return this._hardDelete(model);
@@ -232,8 +238,11 @@ class DataRepository {
         });
     }
 
-    _softDelete(model) {
+    _softDelete(model, deleted_id = '') {
         model.deleted_at = Math.floor(Date.now() / 1000);
+        if (deleted_id) {
+            model.deleted_id = deleted_id;
+        }
         model.save();
     }
 

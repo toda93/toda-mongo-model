@@ -122,7 +122,10 @@ export const DefaultAttributes = {
         deleted_at: {
             type: DataTypes.NUMBER,
             default: 0
-        }
+        },
+        deleted_id: {
+            type: DataTypes.ID,
+        },
     },
     META_DATA: {
         metadata_title: {
