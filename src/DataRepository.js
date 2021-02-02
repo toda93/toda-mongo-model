@@ -215,6 +215,7 @@ class DataRepository {
         }
         return this._hardDelete(model);
     }
+    
     deleteByUser(user_id, model) {
         if (typeof model.deleted_at !== 'undefined') {
             return this._softDelete(model, user_id);
