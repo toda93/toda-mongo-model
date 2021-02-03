@@ -128,21 +128,27 @@ export const DefaultAttributes = {
         },
     },
     META_DATA: {
-        metadata_title: {
-            type: DataTypes.STRING,
+        metadata_disable: {
+            type: DataTypes.NUMBER,
+            default: 0
         },
-        metadata_keywords: {
+        metadata_title: {
             type: DataTypes.STRING,
         },
         metadata_description: {
             type: DataTypes.STRING,
         },
+        metadata_keywords: {
+            type: DataTypes.STRING,
+        },
         metadata_image_url: {
             type: DataTypes.STRING,
         },
-        metadata_disable: {
-            type: DataTypes.NUMBER,
-            default: 0
+        metadata_title_og: {
+            type: DataTypes.STRING,
+        },
+        metadata_description_og: {
+            type: DataTypes.STRING,
         },
     },
 
@@ -173,6 +179,20 @@ export const DefaultAttributes = {
 
 
 class Model {
+
+
+    generateMeta(title, description, keywords, image = null) {
+
+        this.metadata_title = this.metadata_title ? this.metadata_title : title;
+        this.metadata_title_og = this.metadata_title_og ? this.metadata_title_og : title;
+        this.metadata_description = this.metadata_description ? this.metadata_description : description;
+        this.metadata_description_og = this.metadata_description_og ? this.metadata_description_og : description;
+        this.metadata_keywords = this.metadata_keywords ? this.metadata_keywords : keywords;
+        if (image) {
+            this.metadata_image_url = this.metadata_image_url ? this.metadata_image_url : image;
+        }
+    }
+
 
     beforeSave() {
         if (!this.slug) {
