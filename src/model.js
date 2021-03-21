@@ -4,7 +4,7 @@ import mongoose, { Schema } from 'mongoose';
 import mongoosePaginate from 'mongoose-paginate-v2';
 
 import Double from '@mongoosejs/double';
-import { toSlug } from '@azteam/ultilities';
+import { toSlug } from '@azteam/util';
 
 
 function createSchema(colAttributes) {
