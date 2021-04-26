@@ -16,13 +16,18 @@ class DataRepository {
         }
     }
 
-
     count(query, options = {}) {
         const Model = this.getModel();
         if (Model.softDelete && !options.force) {
             query.deleted_at = 0;
         }
         return Model.countDocuments(query);
+    }
+    countTrash(query = {}, options = {}) {
+        return this.count(query, {
+            ...options,
+            force: true
+        });
     }
 
     find(query = {}, options = {}) {
@@ -53,15 +58,18 @@ class DataRepository {
             return queryBuilder.limit(limit);
         }
     }
-
+    findTrash(query = {}, options = {}) {
+        return this.find(query, {
+            ...options,
+            force: true
+        });
+    }
 
     findActivated(query = {}, options = {}) {
         query.status = 1;
         return this.find(query, options);
     }
-
     findNear(geo = {}, query = {}, options = {}) {
-
         geo = {
             name: 'geo',
             coords: [],
@@ -110,8 +118,14 @@ class DataRepository {
         return this.findOne(query, options);
     }
 
-    findOneNear(geo = {}, query = {}, options = {}) {
+    findOneTrash(query = {}, options = {}) {
+        return this.findOneTrash(query, {
+            ...options,
+            force: true
+        });
+    }
 
+    findOneNear(geo = {}, query = {}, options = {}) {
         geo = {
             name: 'geo',
             coords: [],
@@ -143,16 +157,22 @@ class DataRepository {
     }
 
 
-    findOneById(_id, options = {}) {
+    findOneById(_id) {
         return this.findOne({
             _id
-        }, {});
+        });
     }
 
-    findOneBySlug(slug, options = {}) {
+    findOneTrashById(_id) {
+        return this.findOneTrash({
+            _id
+        });
+    }
+
+    findOneBySlug(slug) {
         return this.findOne({
             slug
-        }, {});
+        });
     }
 
 
@@ -215,13 +235,22 @@ class DataRepository {
         }
         return this._hardDelete(model);
     }
-    
+
     deleteByUser(user_id, model) {
         if (typeof model.deleted_at !== 'undefined') {
             return this._softDelete(model, user_id);
         }
         return this._hardDelete(model);
     }
+
+    restore(model, restored_id) {
+        model.deleted_at = 0;
+        if (restored_id) {
+            model.restored_id = restored_id;
+        }
+        model.save();
+    }
+
 
     destroy(model) {
         return this._hardDelete(model);
@@ -247,11 +276,9 @@ class DataRepository {
         model.save();
     }
 
-
     beforeLoadData(data) {
         return data;
     }
-
 
     async _save(model, data, guard = [], allows = []) {
         data = this.beforeLoadData(data);

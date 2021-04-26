@@ -126,6 +126,9 @@ export const DefaultAttributes = {
         deleted_id: {
             type: DataTypes.ID,
         },
+        restored_id: {
+            type: DataTypes.ID,
+        },
     },
     META_DATA: {
         metadata_disable: {
