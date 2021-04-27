@@ -16,7 +16,7 @@ class DataRepository {
         }
     }
 
-    _querySoftDelete(query, softDelete) {
+    _querySoftDelete(query, options, softDelete) {
         if (softDelete) {
             query.deleted_at = 0;
             if (options.force) {
@@ -33,7 +33,7 @@ class DataRepository {
 
     count(query, options = {}) {
         const Model = this.getModel();
-        query = this._querySoftDelete(query, Model.softDelete);
+        query = this._querySoftDelete(query, options, Model.softDelete);
         return Model.countDocuments(query);
     }
     countTrash(query = {}, options = {}) {
@@ -45,7 +45,7 @@ class DataRepository {
 
     find(query = {}, options = {}) {
         const Model = this.getModel();
-        query = this._querySoftDelete(query, Model.softDelete);
+        query = this._querySoftDelete(query, options, Model.softDelete);
 
         if (!options.sort) {
             options.sort = {
@@ -117,7 +117,7 @@ class DataRepository {
 
     findOne(query = {}, options = {}) {
         const Model = this.getModel();
-        query = this._querySoftDelete(query, Model.softDelete);
+        query = this._querySoftDelete(query, options, Model.softDelete);
         return Model.findOne(query);
     }
 
