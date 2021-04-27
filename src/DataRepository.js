@@ -16,26 +16,36 @@ class DataRepository {
         }
     }
 
+    _querySoftDelete(query, softDelete) {
+        if (softDelete) {
+            query.deleted_at = 0;
+            if (options.force) {
+                query.deleted_at = undefined;
+            }
+            if (options.trash) {
+                query.deleted_at = {
+                    $ne: 0
+                };
+            }
+        }
+        return query;
+    }
+
     count(query, options = {}) {
         const Model = this.getModel();
-        if (Model.softDelete && !options.force) {
-            query.deleted_at = 0;
-        }
+        query = this._querySoftDelete(query, Model.softDelete);
         return Model.countDocuments(query);
     }
     countTrash(query = {}, options = {}) {
         return this.count(query, {
             ...options,
-            force: true
+            trash: true
         });
     }
 
     find(query = {}, options = {}) {
         const Model = this.getModel();
-
-        if (Model.softDelete && !options.force) {
-            query.deleted_at = 0;
-        }
+        query = this._querySoftDelete(query, Model.softDelete);
 
         if (!options.sort) {
             options.sort = {
@@ -61,7 +71,7 @@ class DataRepository {
     findTrash(query = {}, options = {}) {
         return this.find(query, {
             ...options,
-            force: true
+            trash: true
         });
     }
 
@@ -107,9 +117,7 @@ class DataRepository {
 
     findOne(query = {}, options = {}) {
         const Model = this.getModel();
-        if (Model.softDelete && !options.force) {
-            query.deleted_at = 0;
-        }
+        query = this._querySoftDelete(query, Model.softDelete);
         return Model.findOne(query);
     }
 
@@ -121,7 +129,7 @@ class DataRepository {
     findOneTrash(query = {}, options = {}) {
         return this.findOne(query, {
             ...options,
-            force: true
+            trash: true
         });
     }
 
