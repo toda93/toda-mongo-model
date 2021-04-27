@@ -243,7 +243,7 @@ class DataRepository {
         return this._hardDelete(model);
     }
 
-    restore(model, restored_id) {
+    restoreByUser(restored_id, model) {
         model.deleted_at = 0;
         if (restored_id) {
             model.restored_id = restored_id;
@@ -254,11 +254,6 @@ class DataRepository {
 
     destroy(model) {
         return this._hardDelete(model);
-    }
-
-    restore(model) {
-        model.deleted_at = 0;
-        return model.save();
     }
 
     _hardDelete(model) {
