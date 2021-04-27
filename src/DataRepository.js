@@ -119,7 +119,7 @@ class DataRepository {
     }
 
     findOneTrash(query = {}, options = {}) {
-        return this.findOneTrash(query, {
+        return this.findOne(query, {
             ...options,
             force: true
         });
