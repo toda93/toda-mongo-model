@@ -118,7 +118,7 @@ class DataRepository {
     findOne(query = {}, options = {}) {
         const Model = this.getModel();
         query = this._querySoftDelete(query, options, Model.softDelete);
-        return Model.findOne(query);
+        return Model.findOne(query, options);
     }
 
     findOneActivated(query = {}, options = {}) {
@@ -130,7 +130,7 @@ class DataRepository {
         return this.findOne(query, {
             ...options,
             trash: true
-        });
+        }, options);
     }
 
     findOneNear(geo = {}, query = {}, options = {}) {
