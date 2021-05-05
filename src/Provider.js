@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import { ErrorException, NOT_INIT_METHOD } from '@azteam/error';
 
 function registerConnection(name, config) {
-    let url = `mongodb://`;
+    let url = `mongodb+srv://`;
     config.shard.map((item, key) => {
         if (key > 0) {
             url += ',';
