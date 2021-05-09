@@ -7,8 +7,86 @@ import Double from '@mongoosejs/double';
 import { toSlug } from '@azteam/util';
 
 
+
+const DataTypes = {
+    DOUBLE: Double,
+    ID: mongoose.Types.ObjectId,
+    INTEGER: mongoose.Decimal128,
+    OBJECT: mongoose.Mixed,
+    STRING: String,
+    NUMBER: Number,
+    ARRAY: Array
+};
+
+const DefaultAttributes = {
+    SOFT_DELETE: {
+        deleted_at: {
+            type: DataTypes.NUMBER,
+            default: 0
+        },
+        deleted_id: {
+            type: DataTypes.ID
+        },
+        restored_id: {
+            type: DataTypes.ID
+        }
+    },
+    META_DATA: {
+        metadata_disable: {
+            type: DataTypes.NUMBER,
+            default: 0
+        },
+        metadata_title: {
+            type: DataTypes.STRING
+        },
+        metadata_description: {
+            type: DataTypes.STRING
+        },
+        metadata_keywords: {
+            type: DataTypes.STRING
+        },
+        metadata_image_url: {
+            type: DataTypes.STRING
+        },
+        metadata_title_og: {
+            type: DataTypes.STRING
+        },
+        metadata_description_og: {
+            type: DataTypes.STRING
+        }
+    },
+
+    MODIFY: {
+        message: {
+            type: DataTypes.STRING
+        },
+        updated_at: {
+            type: DataTypes.NUMBER,
+            default: 0
+        },
+        created_at: {
+            type: DataTypes.NUMBER,
+            default: 0
+        },
+        created_id: {
+            type: DataTypes.ID
+        },
+        modified_at: {
+            type: DataTypes.NUMBER,
+            default: 0
+        },
+        modified_id: {
+            type: DataTypes.ID
+        }
+    }
+};
+
+
 function createSchema(colAttributes) {
-    const decimals = _.reduce(colAttributes, (result, col, key) => {
+    const decimals = _.reduce({
+        ...colAttributes,
+        ...DefaultAttributes.MODIFY
+    }, (result, col, key) => {
         if (col.type && col.type.name === 'Decimal128') {
             colAttributes[key].get = (val) => parseInt(val);
             result.push(key);
@@ -101,89 +179,10 @@ function createSchema(colAttributes) {
 }
 
 
-export {
-    createSchema
-};
-
-export const DataTypes = {
-    DOUBLE: Double,
-    ID: mongoose.Types.ObjectId,
-    INTEGER: mongoose.Decimal128,
-    OBJECT: mongoose.Mixed,
-    STRING: String,
-    NUMBER: Number,
-    ARRAY: Array
-};
-
-export const DefaultAttributes = {
-    SOFT_DELETE: {
-        deleted_at: {
-            type: DataTypes.NUMBER,
-            default: 0
-        },
-        deleted_id: {
-            type: DataTypes.ID
-        },
-        restored_id: {
-            type: DataTypes.ID
-        }
-    },
-    META_DATA: {
-        metadata_disable: {
-            type: DataTypes.NUMBER,
-            default: 0
-        },
-        metadata_title: {
-            type: DataTypes.STRING
-        },
-        metadata_description: {
-            type: DataTypes.STRING
-        },
-        metadata_keywords: {
-            type: DataTypes.STRING
-        },
-        metadata_image_url: {
-            type: DataTypes.STRING
-        },
-        metadata_title_og: {
-            type: DataTypes.STRING
-        },
-        metadata_description_og: {
-            type: DataTypes.STRING
-        }
-    },
-
-    MODIFY: {
-        message: {
-            type: DataTypes.STRING
-        },
-        updated_at: {
-            type: DataTypes.NUMBER,
-            default: 0
-        },
-        created_at: {
-            type: DataTypes.NUMBER,
-            default: 0
-        },
-        created_id: {
-            type: DataTypes.ID
-        },
-        modified_at: {
-            type: DataTypes.NUMBER,
-            default: 0
-        },
-        modified_id: {
-            type: DataTypes.ID
-        }
-    }
-};
 
 
 class Model {
-
-
     generateMeta(title, description, keywords, image = null) {
-
         this.metadata_title = this.metadata_title ? this.metadata_title : title;
         this.metadata_title_og = this.metadata_title_og ? this.metadata_title_og : title;
         this.metadata_description = this.metadata_description ? this.metadata_description : description;
@@ -227,5 +226,11 @@ class Model {
         return this.connection.model(this.name, this.schema, this.table_name);
     }
 }
+
+export {
+    createSchema,
+    DataTypes,
+    DefaultAttributes
+};
 
 export default Model;
