@@ -196,44 +196,27 @@ class DataRepository {
     create(data = {}, guard = [], allows = [], user_id = null) {
         const Model = this.getModel();
         const model = new Model();
+        if (user_id) {
+            model.created_id = user_id;
+            model.modified_id = user_id;
+        }
         return this._save(model, data, guard, allows);
     }
-
-    createForce(data) {
-        return this.create({
-            ...data,
-            forceCreate: true
-        }, [], '*');
-    }
-
 
     createByUser(user_id, data = {}, guard = [], allows = []) {
-        const Model = this.getModel();
-        const model = new Model();
-
-        model.created_id = user_id;
-        model.modified_id = user_id;
-
-        return this._save(model, data, guard, allows);
-
+        return this.create(data, guard, allows, create);
     }
 
 
     async modify(model, data, guard = [], allows = [], user_id = null) {
+        if (user_id) {
+            model.modified_id = user_id;
+        }
         return this._save(model, data, guard, allows);
     }
-
-    modifyForce(model, data) {
-        return this.modify(model, {
-            ...data,
-            forceModify: true
-        }, [], '*');
-    }
-
 
     modifyByUser(user_id, model, data = {}, guard = [], allows = []) {
-        model.modified_id = user_id;
-        return this._save(model, data, guard, allows);
+        return this.modify(model, data, guard, allows, user_id);
     }
 
 
