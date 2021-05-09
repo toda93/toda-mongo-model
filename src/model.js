@@ -34,6 +34,8 @@ function createSchema(colAttributes) {
 
         if (this.constructor.name !== 'EmbeddedDocument') {
 
+            this.isChanged = this.isNew || this.isModified();
+
             this.beforeSave();
 
             const now = Math.floor(Date.now() / 1000);
@@ -52,7 +54,6 @@ function createSchema(colAttributes) {
                 this.modified_at = now;
             }
             this.updated_at = now;
-
         }
         next();
     });
@@ -90,7 +91,7 @@ function createSchema(colAttributes) {
             }
         }
         return this;
-    }
+    };
 
     schema.virtual('id').get(function() {
         return this._id;
@@ -102,7 +103,7 @@ function createSchema(colAttributes) {
 
 export {
     createSchema
-}
+};
 
 export const DataTypes = {
     DOUBLE: Double,
@@ -112,7 +113,7 @@ export const DataTypes = {
     STRING: String,
     NUMBER: Number,
     ARRAY: Array
-}
+};
 
 export const DefaultAttributes = {
     SOFT_DELETE: {
@@ -121,11 +122,11 @@ export const DefaultAttributes = {
             default: 0
         },
         deleted_id: {
-            type: DataTypes.ID,
+            type: DataTypes.ID
         },
         restored_id: {
-            type: DataTypes.ID,
-        },
+            type: DataTypes.ID
+        }
     },
     META_DATA: {
         metadata_disable: {
@@ -133,28 +134,28 @@ export const DefaultAttributes = {
             default: 0
         },
         metadata_title: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING
         },
         metadata_description: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING
         },
         metadata_keywords: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING
         },
         metadata_image_url: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING
         },
         metadata_title_og: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING
         },
         metadata_description_og: {
-            type: DataTypes.STRING,
-        },
+            type: DataTypes.STRING
+        }
     },
 
     MODIFY: {
         message: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING
         },
         updated_at: {
             type: DataTypes.NUMBER,
@@ -165,17 +166,17 @@ export const DefaultAttributes = {
             default: 0
         },
         created_id: {
-            type: DataTypes.ID,
+            type: DataTypes.ID
         },
         modified_at: {
             type: DataTypes.NUMBER,
             default: 0
         },
         modified_id: {
-            type: DataTypes.ID,
-        },
-    },
-}
+            type: DataTypes.ID
+        }
+    }
+};
 
 
 class Model {
@@ -212,7 +213,7 @@ class Model {
     static register(connection) {
         const prototypes = [
             ...Object.getOwnPropertyNames(Model.prototype),
-            ...Object.getOwnPropertyNames(this.prototype),
+            ...Object.getOwnPropertyNames(this.prototype)
         ];
 
         prototypes.map(method => {
