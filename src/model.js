@@ -88,7 +88,7 @@ function createSchema(colAttributes) {
         ...colAttributes,
         ...DefaultAttributes.MODIFY
     };
-    
+
     const decimals = _.reduce(colAttributes, (result, col, key) => {
         if (col.type && col.type.name === 'Decimal128') {
             colAttributes[key].get = (val) => parseInt(val);
@@ -163,10 +163,12 @@ function createSchema(colAttributes) {
             guard = _.difference(guard, allows);
         }
 
-
         for (const key in data) {
             if (_.isEmpty(guard) || !guard.includes(key)) {
                 if (data[key] !== null && data[key] !== undefined) {
+                    if (_.isObject(data[key]) && !_.isEqual(this[key], data[key])) {
+                        continue;
+                    }
                     this[key] = data[key];
                 }
             }
