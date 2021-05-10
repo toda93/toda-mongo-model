@@ -166,7 +166,7 @@ function createSchema(colAttributes) {
         for (const key in data) {
             if (_.isEmpty(guard) || !guard.includes(key)) {
                 if (data[key] !== null && data[key] !== undefined) {
-                    if (_.isObject(data[key]) && !_.isEqual(this[key], data[key])) {
+                    if (_.isObject(data[key]) && _.isEqual(this[key], data[key])) {
                         continue;
                     }
                     this[key] = data[key];
