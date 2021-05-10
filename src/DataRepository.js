@@ -204,7 +204,7 @@ class DataRepository {
     }
 
     createByUser(user_id, data = {}, guard = [], allows = []) {
-        return this.create(data, guard, allows, create);
+        return this.create(data, guard, allows, user_id);
     }
 
 
