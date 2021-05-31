@@ -62,18 +62,21 @@ const DefaultAttributes = {
         },
         updated_at: {
             type: DataTypes.NUMBER,
-            default: 0
+            default: 0,
+            index: true
         },
         created_at: {
             type: DataTypes.NUMBER,
-            default: 0
+            default: 0,
+            index: true
         },
         created_id: {
             type: DataTypes.ID
         },
         modified_at: {
             type: DataTypes.NUMBER,
-            default: 0
+            default: 0,
+            index: true
         },
         modified_id: {
             type: DataTypes.ID
