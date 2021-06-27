@@ -190,6 +190,10 @@ function createSchema(colAttributes) {
 
 
 class Model {
+    constructor() {
+        this.isChanged = false;
+    }
+
     generateMeta(title, description, keywords, image = null) {
         this.metadata_title = this.metadata_title ? this.metadata_title : title;
         this.metadata_title_og = this.metadata_title_og ? this.metadata_title_og : title;
